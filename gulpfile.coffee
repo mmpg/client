@@ -8,7 +8,9 @@ coffee = require 'gulp-coffee'
 concat = require 'gulp-concat'
 uglify = require 'gulp-uglify'
 clean = require 'gulp-clean'
+filter = require 'gulp-filter'
 sequence = require 'run-sequence'
+bower = require 'main-bower-files'
 
 sources =
   coffee: 'src/**/*.coffee'
@@ -28,7 +30,7 @@ isProd = gutil.env.env
 gulp.task 'src', ->
   gulp.src(sources.coffee)
   .pipe(coffee({bare: true}).on('error', gutil.log))
-  .pipe(concat('app.js'))
+  .pipe(concat('client.js'))
   .pipe(if isProd then uglify() else gutil.noop())
   .pipe(gulp.dest(destinations.js))
 
@@ -58,6 +60,13 @@ gulp.task 'examples-html', ->
   gulp.src(sources.examples.html)
   .pipe(gulp.dest(destinations.html))
 
+# Vendor
+gulp.task 'vendor', ->
+  gulp.src(bower())
+  .pipe(filter('*.js'))
+  .pipe(concat('vendor.js'))
+  .pipe(gulp.dest(destinations.js))
+
 # Server
 gulp.task 'browser-sync', ->
   browserSync.init null,
@@ -83,6 +92,6 @@ gulp.task 'clean', ->
   gulp.src(['dist/'], {read: false}).pipe(clean())
 
 gulp.task 'build', ->
-  sequence 'clean', ['lint', 'src', 'examples-src', 'examples-style', 'examples-html']
+  sequence 'clean', ['vendor', 'lint', 'src', 'examples-src', 'examples-style', 'examples-html']
 
 gulp.task 'default', ['build', 'browser-sync','watch']

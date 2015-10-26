@@ -1,5 +1,6 @@
 # Third-party components
 node_modules/
+bower_components/
 
 # Build directory
 dist/

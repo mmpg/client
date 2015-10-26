@@ -1,0 +1,25 @@
+{
+  "name": "mmpg-client",
+  "description": "Library to communicate with the MMPG API easily",
+  "main": "lib/client.js",
+  "authors": [
+    "Héctor Ramón Jiménez"
+  ],
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "api",
+    "client"
+  ],
+  "homepage": "https://github.com/mmpg/client",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
