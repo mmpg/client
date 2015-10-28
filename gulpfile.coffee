@@ -62,7 +62,7 @@ gulp.task 'examples-html', ->
 
 # Vendor
 gulp.task 'vendor', ->
-  gulp.src(bower())
+  gulp.src(bower({ includeDev: true }))
   .pipe(filter('*.js'))
   .pipe(concat('vendor.js'))
   .pipe(gulp.dest(destinations.js))
