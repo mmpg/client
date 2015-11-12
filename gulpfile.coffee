@@ -79,7 +79,7 @@ gulp.task 'browser-sync', ->
 # Watch files
 gulp.task 'watch', ->
   gulp.watch sources.coffee, ['lint', 'src', 'examples-html']
-  gulp.watch sources.examples.coffee, ['examples-lint', 'examples-src', 'examples-html']
+  gulp.watch sources.examples.coffee, ['examples-lint', 'examples-src']
   gulp.watch sources.examples.sass, ['examples-style']
   gulp.watch sources.examples.html, ['examples-html']
 
