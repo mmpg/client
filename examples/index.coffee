@@ -34,7 +34,8 @@ $ ->
         when 'R' then cube.position.x += 0.1
         when 'L' then cube.position.x -= 0.1
 
-  client = new Client('localhost:8080')
+  client = new Client(window.location.hostname + ':8080')
+
   client.handleEvents(handleSync, handleAction)
 
   render()

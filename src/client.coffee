@@ -11,7 +11,7 @@ class Client
     @events_connection.onclose = =>
       console.log("WebSocket disconnected :(")
       setTimeout(=>
-        @handleEvents(callback)
+        @handleEvents(syncCallback, actionCallback)
       , 5000) # Retry every five seconds
 
     @events_connection.onmessage = (event) =>
