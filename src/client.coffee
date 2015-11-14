@@ -2,16 +2,18 @@ class Client
   constructor: (@api) ->
     @synchronized = false
 
-  handleEvents: (syncCallback, actionCallback) ->
+  handleEvents: (callbacks) ->
     @events_connection = new WebSocket("ws://#{@api}/events")
+    @timeout = setTimeout(callbacks.timeout, 3000)
 
     @events_connection.onopen = (event) ->
       console.log("WebSocket connected!")
 
     @events_connection.onclose = =>
       console.log("WebSocket disconnected :(")
+      callbacks.disconnect()
       setTimeout(=>
-        @handleEvents(syncCallback, actionCallback)
+        @handleEvents(callbacks)
       , 5000) # Retry every five seconds
 
     @events_connection.onmessage = (event) =>
@@ -19,6 +21,8 @@ class Client
 
       if msg == 'SYNC'
         @synchronized = true
-        syncCallback(JSON.parse(data))
+        callbacks.sync(JSON.parse(data))
+        clearTimeout(@timeout)
+        @timeout = setTimeout(callbacks.timeout, 3000)
       else if @synchronized and msg == 'ACTION'
-        actionCallback(parseInt(data[0]), JSON.parse(data[1]))
+        callbacks.action(parseInt(data[0]), JSON.parse(data[1]))
