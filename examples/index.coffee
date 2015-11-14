@@ -16,15 +16,27 @@ $ ->
 
   camera.position.z = 5
 
+  world = {
+    synchronized: false
+  }
+
+  gameStatus = $('#gameStatus')
+  gameStatus.text('Loading...')
+
   render = ->
-    cube.rotation.y += 0.01
-    cube.rotation.x += 0.1
+    if world.synchronized
+      cube.rotation.y += 0.01
+      cube.rotation.x += 0.1
+      renderer.render(scene, camera)
+
     requestAnimationFrame(render)
-    renderer.render(scene, camera)
+
 
   handleSync = (data) ->
     cube.position.x = data.players[0].x
     cube.position.y = data.players[0].y
+    world.synchronized = true
+    gameStatus.text('')
 
   handleAction = (player, data) ->
     if data.type == 'move'
