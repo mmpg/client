@@ -1,3 +1,5 @@
+angular.module('viewer', [])
+
 class Message
   constructor: (@element) ->
 

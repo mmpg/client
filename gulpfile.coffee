@@ -65,6 +65,7 @@ gulp.task 'vendor', ->
   gulp.src(bower({ includeDev: true }))
   .pipe(filter('*.js'))
   .pipe(concat('vendor.js'))
+  .pipe(uglify())
   .pipe(gulp.dest(destinations.js))
 
 # Server
