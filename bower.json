@@ -22,6 +22,7 @@
   "devDependencies": {
     "jquery": "~2.1.4",
     "three.js": "threejs#*",
-    "angular": "~1.4.7"
+    "angular": "~1.4.7",
+    "angular-material": "~0.11.4"
   }
 }

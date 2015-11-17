@@ -1,0 +1,11 @@
+doctype html
+html(ng-app='viewer')
+  head
+    meta(charset='utf-8')
+    title MMPG Example
+    link(rel='stylesheet', type='text/css', href=revs('css/style.css'))
+    script(src=revs('js/vendor.js'), defer='')
+    script(src=revs('js/client.js'), defer='')
+    script(src=revs('js/index.js'), defer='')
+  body
+    #gameStatus.msg-center

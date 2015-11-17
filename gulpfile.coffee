@@ -5,10 +5,12 @@ sass = require 'gulp-sass'
 browserSync = require 'browser-sync'
 coffeelint = require 'gulp-coffeelint'
 coffee = require 'gulp-coffee'
+jade = require 'gulp-jade'
 concat = require 'gulp-concat'
 uglify = require 'gulp-uglify'
 clean = require 'gulp-clean'
 filter = require 'gulp-filter'
+rev = require 'gulp-rev'
 sequence = require 'run-sequence'
 bower = require 'main-bower-files'
 
@@ -16,12 +18,13 @@ sources =
   coffee: 'src/**/*.coffee'
   examples:
     coffee: 'examples/**/*.coffee'
-    html:   'examples/**/*.html'
+    html:   'examples/**/*.jade'
     sass:   'examples/**/*.scss'
 
 destinations =
+  dist: 'dist'
   css: 'dist/css'
-  html: 'dist/'
+  html: 'dist'
   js: 'dist/js'
 
 isProd = gutil.env.env
@@ -56,8 +59,24 @@ gulp.task 'examples-style', ->
   .pipe(sass({outputStyle: 'compressed', errLogToConsole: true}))
   .pipe(gulp.dest(destinations.css))
 
+gulp.task 'examples-rev', ->
+  gulp.src([destinations.css + '/*.css', destinations.js + '/*.js'], {base: destinations.dist})
+  .pipe(rev())
+  .pipe(gulp.dest(destinations.dist))
+  .pipe(rev.manifest())
+  .pipe(gulp.dest(destinations.dist))
+
 gulp.task 'examples-html', ->
+  revs = try
+    require("./#{destinations.dist}/rev-manifest.json")
+  catch
+    undefined
+
   gulp.src(sources.examples.html)
+  .pipe(jade({
+      locals: {revs: (rev) -> if revs then revs[rev] else rev},
+      pretty: true
+    }))
   .pipe(gulp.dest(destinations.html))
 
 # Vendor
@@ -73,7 +92,7 @@ gulp.task 'browser-sync', ->
   browserSync.init null,
   open: false
   server:
-    baseDir: "./dist"
+    baseDir: "./#{destinations.dist}"
   watchOptions:
     debounceDelay: 1000
 
@@ -94,5 +113,8 @@ gulp.task 'clean', ->
 
 gulp.task 'build', ->
   sequence 'clean', ['vendor', 'lint', 'src', 'examples-src', 'examples-style', 'examples-html']
+
+gulp.task 'dist', ->
+  sequence 'clean', ['vendor', 'lint', 'src', 'examples-src', 'examples-style'], 'examples-rev', 'examples-html'
 
 gulp.task 'default', ['build', 'browser-sync','watch']
