@@ -11,6 +11,7 @@ uglify = require 'gulp-uglify'
 clean = require 'gulp-clean'
 filter = require 'gulp-filter'
 rev = require 'gulp-rev'
+minifyCss = require 'gulp-minify-css'
 sequence = require 'run-sequence'
 bower = require 'main-bower-files'
 
@@ -32,39 +33,39 @@ isProd = gutil.env.env
 # Compile app code
 gulp.task 'src', ->
   gulp.src(sources.coffee)
-  .pipe(coffee({bare: true}).on('error', gutil.log))
-  .pipe(concat('client.js'))
-  .pipe(if isProd then uglify() else gutil.noop())
-  .pipe(gulp.dest(destinations.js))
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(concat('client.js'))
+    .pipe(if isProd then uglify() else gutil.noop())
+    .pipe(gulp.dest(destinations.js))
 
 # Lint app code
 gulp.task 'lint', ->
   gulp.src(sources.coffee)
-  .pipe(coffeelint())
-  .pipe(coffeelint.reporter())
+    .pipe(coffeelint())
+    .pipe(coffeelint.reporter())
 
 # Examples
 gulp.task 'examples-src', ->
   gulp.src(sources.examples.coffee)
-  .pipe(coffee({bare: true}).on('error', gutil.log))
-  .pipe(gulp.dest(destinations.js))
+    .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(gulp.dest(destinations.js))
 
 gulp.task 'examples-lint', ->
   gulp.src(sources.examples.coffee)
-  .pipe(coffeelint())
-  .pipe(coffeelint.reporter())
+    .pipe(coffeelint())
+    .pipe(coffeelint.reporter())
 
 gulp.task 'examples-style', ->
   gulp.src(sources.examples.sass) # we defined that at the top of the file
-  .pipe(sass({outputStyle: 'compressed', errLogToConsole: true}))
-  .pipe(gulp.dest(destinations.css))
+    .pipe(sass({outputStyle: 'compressed', errLogToConsole: true}))
+    .pipe(gulp.dest(destinations.css))
 
 gulp.task 'examples-rev', ->
   gulp.src([destinations.css + '/*.css', destinations.js + '/*.js'], {base: destinations.dist})
-  .pipe(rev())
-  .pipe(gulp.dest(destinations.dist))
-  .pipe(rev.manifest())
-  .pipe(gulp.dest(destinations.dist))
+    .pipe(rev())
+    .pipe(gulp.dest(destinations.dist))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(destinations.dist))
 
 gulp.task 'examples-html', ->
   revs = try
@@ -73,19 +74,26 @@ gulp.task 'examples-html', ->
     undefined
 
   gulp.src(sources.examples.html)
-  .pipe(jade({
+    .pipe(jade({
       locals: {revs: (rev) -> if revs then revs[rev] else rev},
       pretty: true
     }))
-  .pipe(gulp.dest(destinations.html))
+    .pipe(gulp.dest(destinations.html))
 
 # Vendor
-gulp.task 'vendor', ->
-  gulp.src(bower({ includeDev: true }))
-  .pipe(filter('*.js'))
-  .pipe(concat('vendor.js'))
-  .pipe(uglify())
-  .pipe(gulp.dest(destinations.js))
+gulp.task 'examples-src-vendor', ->
+  gulp.src(bower({includeDev: true}))
+    .pipe(filter('*.js'))
+    .pipe(concat('vendor.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(destinations.js))
+
+gulp.task 'examples-style-vendor', ->
+  gulp.src(bower({includeDev: true}))
+    .pipe(filter('*.css'))
+    .pipe(concat('vendor.css'))
+    .pipe(minifyCss())
+    .pipe(gulp.dest(destinations.css))
 
 # Server
 gulp.task 'browser-sync', ->
@@ -111,10 +119,14 @@ gulp.task 'watch', ->
 gulp.task 'clean', ->
   gulp.src(['dist/'], {read: false}).pipe(clean())
 
-gulp.task 'build', ->
-  sequence 'clean', ['vendor', 'lint', 'src', 'examples-src', 'examples-style', 'examples-html']
+gulp.task 'build', (callback) ->
+  sequence 'clean', ['lint', 'src', 'examples-src-vendor', 'examples-style-vendor', 'examples-src', 'examples-style', 'examples-html'], callback
 
 gulp.task 'dist', ->
-  sequence 'clean', ['vendor', 'lint', 'src', 'examples-src', 'examples-style'], 'examples-rev', 'examples-html'
+  sequence 'clean', [
+    'lint', 'src', 'examples-src-vendor',
+    'examples-style-vendor', 'examples-src', 'examples-style'
+    ], 'examples-rev', 'examples-html'
 
-gulp.task 'default', ['build', 'browser-sync','watch']
+gulp.task 'default', (callback) ->
+  sequence 'build', ['browser-sync', 'watch'], callback

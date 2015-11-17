@@ -1,4 +1,4 @@
-angular.module('viewer', [])
+angular.module('viewer', ['ngMaterial'])
 
 class Message
   constructor: (@element) ->
