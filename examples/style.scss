@@ -8,6 +8,16 @@ canvas {
   height: 100%;
 }
 
+#toolbar {
+  position: absolute;
+  width: 100%;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
 .msg-center {
   position: absolute;
   color: #FFF;
