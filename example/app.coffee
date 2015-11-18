@@ -1,4 +1,4 @@
-angular.module('viewer', ['ngMaterial'])
+angular.module 'mmpgViewer', ['ngMaterial', 'mmpgLogin']
 
 class Message
   constructor: (@element) ->

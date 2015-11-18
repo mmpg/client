@@ -14,13 +14,22 @@ rev = require 'gulp-rev'
 minifyCss = require 'gulp-minify-css'
 sequence = require 'run-sequence'
 bower = require 'main-bower-files'
+ngAnnotate = require 'gulp-ng-annotate'
 
 sources =
   coffee: 'src/**/*.coffee'
   examples:
-    coffee: 'examples/**/*.coffee'
-    html:   'examples/**/*.jade'
-    sass:   'examples/**/*.scss'
+    coffee: 'example/**/*.coffee'
+    html:   'example/**/*.jade'
+    sass:   'example/**/*.scss'
+    vendor: [
+      'bower_components/jquery/dist/jquery.min.js'
+      'bower_components/angular/angular.min.js'
+      'bower_components/angular-animate/angular-animate.min.js'
+      'bower_components/angular-aria/angular-aria.min.js'
+      'bower_components/angular-material/angular-material.min.js'
+      'bower_components/three.js/build/three.min.js'
+    ]
 
 destinations =
   dist: 'dist'
@@ -48,6 +57,8 @@ gulp.task 'lint', ->
 gulp.task 'examples-src', ->
   gulp.src(sources.examples.coffee)
     .pipe(coffee({bare: true}).on('error', gutil.log))
+    .pipe(concat('app.js'))
+    .pipe(ngAnnotate())
     .pipe(gulp.dest(destinations.js))
 
 gulp.task 'examples-lint', ->
@@ -82,10 +93,8 @@ gulp.task 'examples-html', ->
 
 # Vendor
 gulp.task 'examples-src-vendor', ->
-  gulp.src(bower({includeDev: true}))
-    .pipe(filter('*.js'))
+  gulp.src(sources.examples.vendor)
     .pipe(concat('vendor.js'))
-    .pipe(uglify())
     .pipe(gulp.dest(destinations.js))
 
 gulp.task 'examples-style-vendor', ->

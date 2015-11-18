@@ -27,8 +27,12 @@ canvas {
   left: 50%;
   margin-left: -400px;
   margin-top: -25px;
-  z-index: 100;
+  z-index: 1;
   text-align: center;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 40px;
+}
+
+.md-dialog-content {
+  min-width: 300px;
 }
