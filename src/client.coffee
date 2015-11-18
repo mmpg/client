@@ -26,3 +26,17 @@ class Client
         @timeout = setTimeout(callbacks.timeout, 3000)
       else if @synchronized and msg == 'ACTION'
         callbacks.action(parseInt(data[0]), JSON.parse(data[1]))
+
+  login: ({email, password}) ->
+    token = undefined
+
+    $.ajax(
+      type: 'POST'
+      url: "http://#{@api}/auth"
+      data: JSON.stringify({ email: email, password: password })
+      contentType: 'application/json; charset=utf-8'
+      dataType: 'json'
+    ).done (data) ->
+      token = data
+
+    return token

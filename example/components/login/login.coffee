@@ -1,5 +1,5 @@
 angular.module 'mmpgLogin', []
-  .directive 'login', ($mdDialog) ->
+  .directive 'login', ($mdDialog, Api) ->
     restrict: 'A'
     link: (scope, element) ->
       element.on 'click', (event) ->
@@ -8,6 +8,12 @@ angular.module 'mmpgLogin', []
           targetEvent: event
           templateUrl: 'components/login/form.html'
           clickOutsideToClose: true
-          controller: (scope) ->
-            scope.close = ->
-              $mdDialog.hide()
+          controller: ($scope) ->
+            $scope.user = { email: '', password: '' }
+            $scope.login = ->
+              token = Api.login($scope.user)
+
+              if token
+                alert('Valid credentials')
+              else
+                alert('Invalid credentials')
