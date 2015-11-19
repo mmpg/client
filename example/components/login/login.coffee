@@ -11,9 +11,9 @@ angular.module 'mmpgLogin', []
           controller: ($scope) ->
             $scope.user = { email: '', password: '' }
             $scope.login = ->
-              token = Api.login($scope.user)
-
-              if token
-                alert('Valid credentials')
-              else
-                alert('Invalid credentials')
+              Api.login($scope.user)
+                .done (token) ->
+                  alert('Valid credentials')
+                .fail (e, b, error) ->
+                  console.log(error)
+                  alert('Invalid credentials')
