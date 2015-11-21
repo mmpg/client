@@ -43,11 +43,9 @@ $ ->
 
   handleDisconnect = ->
     gameStatus.show('Connection lost. Reconnecting...') if client.synchronized
-    client.synchronized = false
 
   handleTimeout = ->
     gameStatus.show('Game paused') if client.synchronized
-    client.synchronized = false
 
   handleSync = (data) ->
     cube.position.x = data.players[0].x
