@@ -9,10 +9,8 @@ html(ng-app='mmpgViewer')
     script(src=revs('js/client.js') defer)
     script(src=revs('js/app.js') defer)
   body
-    #toolbar
-      .container
-        div(layout='row' layout-wrap)
-          div(flex='70')
-          div(flex='30' align='right')
-            md-button.md-raised.md-primary(login) Login
+    #toolbar(layout='row' layout-align='end center')
+      md-button.md-raised.md-primary(login) Login
     #gameStatus.msg-center
+    .overlay(layout='row' layout-align='start end')
+      debug

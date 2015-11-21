@@ -1,4 +1,4 @@
-angular.module 'mmpgViewer', ['ngMaterial', 'mmpgApi', 'mmpgLogin']
+angular.module 'mmpgViewer', ['ngMaterial', 'mmpgApi', 'mmpgLogin', 'mmpgDebug']
 
 class Message
   constructor: (@element) ->
@@ -31,7 +31,7 @@ $ ->
   gameStatus = new Message($('#gameStatus'))
   gameStatus.show('Loading...')
 
-  client = new Client(window.location.hostname + ':8080')
+  client = angular.element(document.body).injector().get('Api')
 
   render = ->
     if client.synchronized

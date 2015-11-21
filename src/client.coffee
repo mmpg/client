@@ -1,7 +1,7 @@
 class Client
   constructor: (@api) ->
     @synchronized = false
-    @game = new Game(30)
+    @game = new Game(60)
 
   handleEvents: (callbacks) ->
     @events_connection = new WebSocket("ws://#{@api}/events")
