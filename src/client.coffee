@@ -37,7 +37,6 @@ class Client
         callbacks.action(parseInt(data[0]), JSON.parse(data[1]))
 
     @events_connection.onmessage = (event) =>
-      console.log(event)
       now = parseInt(event.data.split(' ')[0])
       diff = if @last then now - @last else 0
       @last = now
