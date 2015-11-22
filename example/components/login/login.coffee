@@ -8,8 +8,9 @@ angular.module 'mmpgLogin', []
           targetEvent: event
           templateUrl: 'components/login/form.html'
           clickOutsideToClose: true
+          disableParentScroll: false
           controller: ($scope) ->
-            $scope.user = { email: '', password: '' }
+            $scope.user = { email: '', password: '', remember: false }
             $scope.login = ->
               Api.login($scope.user)
                 .done (token) ->

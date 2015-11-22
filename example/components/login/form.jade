@@ -10,7 +10,7 @@ md-dialog(aria-label='Login' ng-cloak)
           input(type='password' ng-model='user.password')
         
         div(align='center')
-          md-checkbox.md-primary(aria-label='Remember me') Keep me logged in
+          md-checkbox.md-primary(aria-label='Keep me logged in' ng-model='user.remember') Keep me logged in
         
     md-dialog-actions(layout='row' layout-align='center center')
         md-button.md-raised.md-primary(ng-click='login()' layout='row') Login

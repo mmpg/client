@@ -1,4 +1,9 @@
 angular.module 'mmpgViewer', ['ngMaterial', 'mmpgApi', 'mmpgLogin', 'mmpgDebug']
+  .config ($mdThemingProvider) ->
+    $mdThemingProvider.theme('default')
+      .dark()
+      .backgroundPalette('grey', default: '900')
+      .foregroundPalette['3'] = 'rgba(198,198,198,0.9)'
 
 class Message
   constructor: (@element) ->
