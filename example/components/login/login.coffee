@@ -1,5 +1,5 @@
 angular.module 'mmpgLogin', []
-  .directive 'login', ($mdDialog, Api) ->
+  .directive 'login', ($mdDialog) ->
     restrict: 'A'
     link: (scope, element) ->
       element.on 'click', (event) ->
@@ -9,10 +9,10 @@ angular.module 'mmpgLogin', []
           templateUrl: 'components/login/form.html'
           clickOutsideToClose: true
           disableParentScroll: false
-          controller: ($scope) ->
+          controller: ($scope, Client) ->
             $scope.user = { email: '', password: '', remember: false }
             $scope.login = ->
-              Api.login($scope.user)
+              Client.login($scope.user)
                 .done (token) ->
                   alert('Valid credentials')
                 .fail (e, b, error) ->

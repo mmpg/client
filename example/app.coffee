@@ -1,4 +1,4 @@
-angular.module 'mmpgViewer', ['ngMaterial', 'mmpgApi', 'mmpgLogin', 'mmpgDebug']
+angular.module 'mmpgViewer', ['ngMaterial', 'mmpgClient', 'mmpgLogin', 'mmpgDebug']
   .config ($mdThemingProvider) ->
     $mdThemingProvider.theme('default')
       .dark()
@@ -34,30 +34,29 @@ $ ->
   camera.position.z = 5
 
   gameStatus = new Message($('#gameStatus'))
-  gameStatus.show('Loading...')
 
-  client = angular.element(document.body).injector().get('Api')
 
-  render = ->
-    if client.synchronized
-      cube.rotation.y += 0.01
-      cube.rotation.x += 0.1
-      renderer.render(scene, camera)
+  client = angular.element(document.body).injector().get('Client')
+  stream = angular.element(document.body).injector().get('EventStream')
+  liveSubscriber = new MMPG.LiveSubscriber
 
-    requestAnimationFrame(render)
+  stream.notify(liveSubscriber)
 
-  handleDisconnect = ->
-    gameStatus.show('Connection lost. Reconnecting...') if client.synchronized
+  liveSubscriber.onConnect = ->
+    gameStatus.show('Loading...')
 
-  handleTimeout = ->
-    gameStatus.show('Game paused') if client.synchronized
+  liveSubscriber.onDisconnect = ->
+    gameStatus.show('Connection lost. Reconnecting...') if liveSubscriber.buffer.isEmpty()
 
-  handleSync = (data) ->
+  liveSubscriber.onTimeout = ->
+    gameStatus.show('Game paused') if liveSubscriber.synchronized
+
+  liveSubscriber.onSync = (data) ->
     cube.position.x = data.players[0].x
     cube.position.y = data.players[0].y
     gameStatus.hide()
 
-  handleAction = (player, data) ->
+  liveSubscriber.onAction = (player, data) ->
     if data.type == 'move'
       switch data.direction
         when 'U' then cube.position.y += 0.1
@@ -65,11 +64,13 @@ $ ->
         when 'R' then cube.position.x += 0.1
         when 'L' then cube.position.x -= 0.1
 
-  client.handleEvents(
-    sync: handleSync,
-    disconnect: handleDisconnect,
-    timeout: handleTimeout,
-    action: handleAction
-  )
+  render = ->
+    if liveSubscriber.synchronized
+      cube.rotation.y += 0.01
+      cube.rotation.x += 0.1
+      renderer.render(scene, camera)
+
+    requestAnimationFrame(render)
 
   render()
+  stream.connect()

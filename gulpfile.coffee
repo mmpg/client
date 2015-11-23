@@ -17,7 +17,7 @@ bower = require 'main-bower-files'
 ngAnnotate = require 'gulp-ng-annotate'
 
 sources =
-  coffee: 'src/**/*.coffee'
+  coffee: ['src/client.coffee', 'src/**/*.coffee']
   examples:
     coffee: 'example/**/*.coffee'
     html:   'example/**/*.jade'
