@@ -12,14 +12,33 @@ angular.module 'mmpgViewer', ['ngMaterial', 'mmpgClient', 'mmpgLogin', 'mmpgDebu
     apply()
 
 class Message
-  constructor: (@element) ->
+  constructor: (@element, @speed=50) ->
+    @hide()
 
   show: (msg) ->
-    @element.text msg
+    @reset()
+    @text = msg
     @element.show()
+    @hidden = false
+
+  update: (delta) ->
+    return if @hidden or @current_chars == @text.length
+
+    @accum += delta
+    num_chars = Math.min(@text.length, @speed * @accum / 1000)
+
+    if @current_chars < num_chars
+      @current_chars = num_chars
+      @element.text(@text[0...@current_chars])
 
   hide: ->
     @element.hide()
+    @hidden = true
+    @reset()
+
+  reset: ->
+    @accum = 0
+    @current_chars = 0
 
 $ ->
   scene = new THREE.Scene()
@@ -41,10 +60,12 @@ $ ->
 
   gameStatus = new Message($('#gameStatus'))
 
-
   client = angular.element(document.body).injector().get('Client')
   stream = angular.element(document.body).injector().get('EventStream')
   liveSubscriber = new MMPG.LiveSubscriber
+  game = new MMPG.GameLoop(30)
+
+  game.entities.push(gameStatus)
 
   stream.notify(liveSubscriber)
 
@@ -80,3 +101,4 @@ $ ->
 
   render()
   stream.connect()
+  game.start()

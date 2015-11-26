@@ -2,6 +2,8 @@ class MMPG.Subscriber
   constructor: ->
     @synchronized = false
     @buffer = new MMPG.Buffer(60, @handleEvent)
+    @last_tick = 0
+    @last_item = 0
 
   handleEvent: (event) =>
     [@time, msg, data...] = event.data.split(' ')
@@ -19,13 +21,12 @@ class MMPG.Subscriber
   reset: ->
     @synchronized = false
     @buffer.clear()
+    clearTimeout(@timeout)
 
   triggerDisconnect: ->
     @onDisconnect()
-
-  triggerTimeout: =>
+  triggerTimeout: ->
     @onTimeout()
-    @reset()
 
   onConnect: ->
   onDisconnect: ->
