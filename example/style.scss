@@ -47,8 +47,17 @@ canvas {
   left: 0;
 }
 
-#debug {
+#debug, #game-time {
   color: #FFF;
   font-family: "Lucida Console", Monaco, monospace;
   padding: 10px;
+}
+
+#game-time {
+  font-size: 30px;
+
+  .small {
+    font-size: 12px;
+    text-align: center;
+  }
 }

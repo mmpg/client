@@ -4,7 +4,7 @@ class MMPG.Subscriber
     @buffer = new MMPG.Buffer(60, @handleEvent)
 
   handleEvent: (event) =>
-    [time, msg, data...] = event.data.split(' ')
+    [@time, msg, data...] = event.data.split(' ')
 
     if msg == 'SYNC'
       @synchronized = true

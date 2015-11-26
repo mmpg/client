@@ -1,9 +1,15 @@
-angular.module 'mmpgViewer', ['ngMaterial', 'mmpgClient', 'mmpgLogin', 'mmpgDebug']
+angular.module 'mmpgViewer', ['ngMaterial', 'mmpgClient', 'mmpgLogin', 'mmpgDebug', 'mmpgGameTime']
   .config ($mdThemingProvider) ->
     $mdThemingProvider.theme('default')
       .dark()
       .backgroundPalette('grey', default: '900')
       .foregroundPalette['3'] = 'rgba(198,198,198,0.9)'
+
+  .run ($timeout) ->
+    apply = ->
+      $timeout(apply, 500)
+
+    apply()
 
 class Message
   constructor: (@element) ->
