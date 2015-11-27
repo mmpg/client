@@ -44,7 +44,7 @@ class MMPG.Subscriber
       if @buffer.items.length > 0
         @timer = setTimeout(game_loop, @buffer.items[0][1] - @ticker.accum)
       else
-        @clear()
+        @reset()
 
     game_loop()
 
