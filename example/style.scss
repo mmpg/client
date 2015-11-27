@@ -54,10 +54,18 @@ canvas {
 }
 
 #game-time {
-  font-size: 30px;
+  font-size: 40px;
 
   .small {
     font-size: 12px;
     text-align: center;
+  }
+
+  md-icon {
+    color: #FFF;
+  }
+
+  .md-button[disabled] md-icon {
+    color: #666;
   }
 }

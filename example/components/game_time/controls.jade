@@ -1,3 +1,15 @@
 #game-time
-  .small {{stream.subscriber.time | date: 'EEEE MM/dd'}}
-  {{stream.subscriber.time | date: 'HH:mm:ss'}}
+
+  div(ng-show='stream.subscriber.time')
+    div(align='center')
+      .small {{stream.subscriber.time | date: 'EEEE MM/dd'}}
+      div {{stream.subscriber.time | date: 'HH:mm:ss'}}
+    
+      md-button.md-icon-button(ng-mousedown='start_rewind($event)' ng-mouseup='stop($event)')
+        md-icon.material-icons(aria-label='fast_rewind') fast_rewind
+        
+      md-button.md-icon-button(ng-disabled='!stream.subscriber.pause' ng-click='play()')
+        md-icon.material-icons(aria-label='Play/Pause') {{stream.subscriber.stopped ? 'play_arrow' : 'pause'}}
+          
+      md-button.md-icon-button(ng-disabled='true')
+        md-icon.material-icons(aria-label='fast_forward') fast_forward
