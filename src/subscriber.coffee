@@ -1,11 +1,11 @@
 class MMPG.Subscriber
   constructor: ->
     @synchronized = false
-    @buffer = new MMPG.Buffer(60, @handleEvent)
-    @last_tick = 0
-    @last_item = 0
+    @stopped = true
+    @buffer = new MMPG.Buffer(60)
+    @ticker = new MMPG.Ticker
 
-  handleEvent: (event) =>
+  handleEvent: (event) ->
     [@time, msg, data...] = event.data.split(' ')
 
     if msg == 'SYNC'
@@ -20,11 +20,37 @@ class MMPG.Subscriber
 
   reset: ->
     @synchronized = false
+    @stopped = true
     @buffer.clear()
+    @ticker.clear()
     clearTimeout(@timeout)
+    clearTimeout(@timer)
+
+  start: ->
+    return unless @stopped
+
+    @stopped = false
+
+    game_loop = =>
+      return if @buffer.items.length == 0
+
+      @ticker.tick()
+
+      while @buffer.items.length > 0 and @ticker.accum >= @buffer.items[0][1]
+        event = @buffer.items.shift()
+        @handleEvent(event[0])
+        @ticker.accum -= event[1]
+
+      if @buffer.items.length > 0
+        @timer = setTimeout(game_loop, @buffer.items[0][1] - @ticker.accum)
+      else
+        @clear()
+
+    game_loop()
 
   triggerDisconnect: ->
     @onDisconnect()
+
   triggerTimeout: ->
     @onTimeout()
 
