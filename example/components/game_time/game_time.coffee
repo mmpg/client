@@ -4,10 +4,11 @@ angular.module 'mmpgGameTime', []
     templateUrl: 'components/game_time/controls.html'
     controller: ($scope, EventStream) ->
       $scope.stream = EventStream
-      originalSubscriber = EventStream.subscriber
-      playbackSubscriber = new MMPG.PlaybackSubscriber
-
       timer = null
+
+      playbackMode = ->
+        if EventStream.subscriber instanceof MMPG.LiveSubscriber
+          EventStream.notify(new MMPG.PlaybackSubscriber(EventStream.subscriber))
 
       amount = (event) ->
         seconds = if event.ctrlKey
@@ -33,11 +34,17 @@ angular.module 'mmpgGameTime', []
         event.target.blur()
 
       $scope.start_rewind = (event) ->
-        playbackSubscriber.time = EventStream.subscriber.time
-        EventStream.notify(playbackSubscriber)
+        playbackMode()
 
         apply ->
-          playbackSubscriber.time -= amount(event)
+          EventStream.subscriber.time -= amount(event)
 
-      $scope.play = ->
-        EventStream.subscriber.play()
+      $scope.play_pause = ->
+        stopped = EventStream.subscriber.stopped
+
+        playbackMode()
+
+        if stopped
+          EventStream.subscriber.play()
+        else
+          EventStream.subscriber.pause()

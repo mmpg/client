@@ -4,11 +4,15 @@
     div(align='center')
       .small {{stream.subscriber.time | date: 'EEEE MM/dd'}}
       div {{stream.subscriber.time | date: 'HH:mm:ss'}}
-    
+      
+      div
+        md-progress-linear(md-mode='buffer' value='{{stream.subscriber.processed}}'
+          md-buffer-value='{{stream.subscriber.loaded}}')
+      
       md-button.md-icon-button(ng-mousedown='start_rewind($event)' ng-mouseup='stop($event)')
         md-icon.material-icons(aria-label='fast_rewind') fast_rewind
         
-      md-button.md-icon-button(ng-disabled='!stream.subscriber.pause' ng-click='play()')
+      md-button.md-icon-button(ng-click='play_pause()')
         md-icon.material-icons(aria-label='Play/Pause') {{stream.subscriber.stopped ? 'play_arrow' : 'pause'}}
           
       md-button.md-icon-button(ng-disabled='true')
