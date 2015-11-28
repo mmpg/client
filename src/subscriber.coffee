@@ -6,25 +6,28 @@ class MMPG.Subscriber
     @ticker = new MMPG.Ticker
 
   handleEvent: (event) ->
-    [@time, msg, data...] = event.data.split(' ')
+    @time = event.time
 
-    if msg == 'SYNC'
+    if event.msg == 'SYNC'
       @synchronized = true
-      @onSync(JSON.parse(data))
+      @onSync(JSON.parse(event.data))
 
       clearTimeout(@timeout)
       @timeout = setTimeout(@triggerTimeout, 3000)
 
-    else if @synchronized and msg == 'ACTION'
-      @onAction(parseInt(data[0]), JSON.parse(data[1]))
+    else if @synchronized and event.msg == 'ACTION'
+      @onAction(parseInt(event.data[0]), JSON.parse(event.data[1]))
 
-  reset: ->
-    @synchronized = false
+  stop: ->
     @stopped = true
-    @buffer.clear()
     @ticker.clear()
     clearTimeout(@timeout)
     clearTimeout(@timer)
+
+  reset: ->
+    @synchronized = false
+    @buffer.clear()
+    @stop()
 
   start: ->
     return unless @stopped
@@ -44,7 +47,12 @@ class MMPG.Subscriber
       if @buffer.items.length > 0
         @timer = setTimeout(game_loop, @buffer.items[0][1] - @ticker.accum)
 
+      # TODO: Think about what happens when the buffer empties
+
     game_loop()
+
+  triggerEvent: (event) ->
+    @onEvent(new MMPG.Event(event.data))
 
   triggerDisconnect: ->
     @onDisconnect()

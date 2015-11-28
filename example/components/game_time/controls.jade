@@ -1,19 +1,24 @@
 #game-time
-
   div(ng-show='stream.subscriber.time')
     div(align='center')
       .small {{stream.subscriber.time | date: 'EEEE MM/dd'}}
-      div {{stream.subscriber.time | date: 'HH:mm:ss'}}
+      .big {{stream.subscriber.time | date: 'HH:mm:ss'}}
       
-      div
-        md-progress-linear(md-mode='buffer' value='{{stream.subscriber.processed}}'
-          md-buffer-value='{{stream.subscriber.loaded}}')
-      
-      md-button.md-icon-button(ng-mousedown='start_rewind($event)' ng-mouseup='stop($event)')
-        md-icon.material-icons(aria-label='fast_rewind') fast_rewind
+      div(layout='row' layout-align='space-between center')
+        md-button.md-icon-button(ng-mousedown='start_rewind($event)'
+          ng-mouseup='stop($event)')
+          md-icon.material-icons(aria-label='fast_rewind') fast_rewind
+            
+        md-progress-circular(md-mode='determinate'
+          value='{{stream.subscriber.loadProgress}}'
+          md-diameter='25px' ng-show='stream.subscriber.loading')
         
-      md-button.md-icon-button(ng-click='play_pause()')
-        md-icon.material-icons(aria-label='Play/Pause') {{stream.subscriber.stopped ? 'play_arrow' : 'pause'}}
-          
-      md-button.md-icon-button(ng-disabled='true')
-        md-icon.material-icons(aria-label='fast_forward') fast_forward
+        md-button.md-icon-button(ng-click='play_pause()' ng-hide='stream.subscriber.loading')
+          md-icon.material-icons(aria-label='Play/Pause') {{stream.subscriber.stopped ? 'play_arrow' : 'pause'}}
+        
+        md-button.md-icon-button(ng-disabled='true')
+          md-icon.material-icons(aria-label='fast_forward') fast_forward
+        
+      div(layout='row' layout-align='center center')
+        md-progress-linear(md-mode='buffer' value='{{processed()}}'
+          md-buffer-value='{{loaded()}}')

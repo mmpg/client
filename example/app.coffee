@@ -89,7 +89,7 @@ $ ->
         when 'L' then cube.position.x -= 0.1
 
   render = ->
-    if liveSubscriber.synchronized
+    if stream.subscriber.synchronized
       cube.rotation.y += 0.01
       cube.rotation.x += 0.1
       renderer.render(scene, camera)

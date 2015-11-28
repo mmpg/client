@@ -18,7 +18,7 @@ class MMPG.EventStream
       setTimeout(@connect, 5000) # Retry every five seconds
 
     @connection.onmessage = (event) =>
-      @subscriber.onEvent(event)
+      @subscriber.triggerEvent(event)
 
   disconnect: ->
     @connection.close()

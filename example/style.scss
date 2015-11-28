@@ -54,7 +54,9 @@ canvas {
 }
 
 #game-time {
-  font-size: 40px;
+  .big {
+    font-size: 40px;
+  }
 
   .small {
     font-size: 12px;

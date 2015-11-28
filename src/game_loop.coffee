@@ -1,7 +1,7 @@
 class MMPG.GameLoop
   constructor: (ticks_per_second) ->
     @entities = []
-    @interval = 1.0 / ticks_per_second;
+    @interval = 1.0 / ticks_per_second
     @ticker = new MMPG.Ticker
 
   start: =>

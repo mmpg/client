@@ -14,3 +14,18 @@ class MMPG.Client
       contentType: 'application/json; charset=utf-8'
       dataType: 'json'
     )
+
+  log: (time, progressCallback) ->
+    $.ajax(
+      type: 'GET'
+      url: "http://#{@api}/log"
+      data: { time: Math.floor(time / 1000) }
+      xhr: ->
+        xhr = $.ajaxSettings.xhr()
+
+        xhr.onprogress = (event) ->
+          if progressCallback and event.lengthComputable
+            progressCallback(event.loaded / event.total * 100)
+
+        return xhr
+    )
