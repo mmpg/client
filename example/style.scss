@@ -73,5 +73,11 @@ canvas {
 }
 
 md-progress-linear .md-bar1 {
-  background-color: rgba(63,81,181, 0.5);
+  background-color: rgba(63, 81, 181, 0.5);
+}
+
+md-tooltip .md-content {
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 16px;
+  font-family: "Lucida Console", Monaco, monospace;
 }

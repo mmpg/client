@@ -9,10 +9,15 @@ html(ng-app='mmpgViewer')
     script(src=revs('js/vendor.js') defer)
     script(src=revs('js/client.js') defer)
     script(src=revs('js/app.js') defer)
+  
   body
     #toolbar(layout='row' layout-align='end center')
-      md-button.md-raised.md-primary(login) Login
+      md-button.md-fab.md-primary(login)
+        md-tooltip(md-direction='left') Login
+        md-icon.material-icons(aria-label='Login') lock_open
+        
     #gameStatus.msg-center
+    
     .overlay(layout='row' layout-align='start end')
       debug
       div(flex)
