@@ -19,6 +19,7 @@ ngAnnotate = require 'gulp-ng-annotate'
 sources =
   coffee: ['src/client.coffee', 'src/**/*.coffee']
   examples:
+    public: 'example/public/*'
     coffee: 'example/**/*.coffee'
     html:   'example/**/*.jade'
     sass:   'example/**/*.scss'
@@ -52,6 +53,11 @@ gulp.task 'lint', ->
   gulp.src(sources.coffee)
     .pipe(coffeelint())
     .pipe(coffeelint.reporter())
+
+# Public resources
+gulp.task 'examples-public', ->
+  gulp.src(sources.examples.public)
+    .pipe(gulp.dest(destinations.dist))
 
 # Examples
 gulp.task 'examples-src', ->
@@ -128,14 +134,19 @@ gulp.task 'watch', ->
 gulp.task 'clean', ->
   gulp.src(['dist/'], {read: false}).pipe(clean())
 
-gulp.task 'build', (callback) ->
-  sequence 'clean', ['lint', 'src', 'examples-src-vendor', 'examples-style-vendor', 'examples-src', 'examples-style', 'examples-html'], callback
+gulp.task 'assets', (callback) ->
+  sequence 'lint', 'examples-lint', [
+    'src',
+    'examples-public',
+    'examples-src-vendor', 'examples-src',
+    'examples-style-vendor', 'examples-style'
+  ], callback
 
-gulp.task 'dist', ->
-  sequence 'clean', [
-    'lint', 'src', 'examples-src-vendor',
-    'examples-style-vendor', 'examples-src', 'examples-style'
-    ], 'examples-rev', 'examples-html'
+gulp.task 'build', (callback) ->
+  sequence 'clean', ['assets', 'examples-html'], callback
+
+gulp.task 'dist', (callback) ->
+  sequence 'clean', 'assets', 'examples-rev', 'examples-html', callback
 
 gulp.task 'default', (callback) ->
   sequence 'build', ['browser-sync', 'watch'], callback
