@@ -11,10 +11,16 @@ angular.module 'mmpgLogin', []
           disableParentScroll: false
           controller: ($scope, Client) ->
             $scope.user = { email: '', password: '', remember: false }
+            $scope.loading = false
+
             $scope.login = ->
+              $scope.loading = true
+
               Client.login($scope.user)
                 .done (token) ->
                   alert('Valid credentials')
                 .fail (e, b, error) ->
                   console.log(error)
                   alert('Invalid credentials')
+                .always ->
+                  $scope.loading = false

@@ -1,19 +1,27 @@
 md-dialog(aria-label='Login' ng-cloak)
-  form
+  form(name='loginForm')
     md-dialog-content
       .md-dialog-content
         div(align='center')
           img(src='semafor.png')
         
-        md-input-container.md-block
+        md-input-container.md-block.md-icon-float
           label E-Mail
-          input(type='email' ng-model='user.email')
+          md-icon.material-icons email
+          input(type='email' ng-model='user.email' ng-disabled='loading' required)
+          div(ng-messages='loginForm.email.$error')
+            div(ng-message='required') The e-mail address is invalid.
+            
         md-input-container.md-block
           label Password
-          input(type='password' ng-model='user.password')
+          md-icon.material-icons vpn_key
+          input(type='password' ng-model='user.password' ng-disabled='loading' required)
+          div(ng-messages='loginForm.password.$error')
+            div(ng-message='required') A password is required.
         
         div(align='center')
           md-checkbox.md-primary(aria-label='Keep me logged in' ng-model='user.remember') Keep me logged in
         
     md-dialog-actions(layout='row' layout-align='center center')
-        md-button.md-raised.md-primary(ng-click='login()' layout='row') Login
+        md-button.md-raised.md-primary(ng-click='login()' layout='row' ng-hide='loading') Login
+        md-progress-circular(md-mode='indeterminate' ng-show='loading')
