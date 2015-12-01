@@ -14,6 +14,9 @@ angular.module 'mmpgLogin', []
             $scope.loading = false
             $scope.invalidCredentials = false
 
+            $scope.close = ->
+              $mdDialog.hide()
+
             $scope.formInvalid = ->
               $scope.loginForm?.$invalid || $scope.loginForm?.email?.$error?.credentials
 
