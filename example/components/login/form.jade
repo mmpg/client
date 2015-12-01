@@ -13,10 +13,11 @@ md-dialog(aria-label='Login' ng-cloak)
         md-input-container.md-block.md-icon-float
           label E-Mail
           md-icon.material-icons email
-          input(name='email' type='email' ng-model='user.email' ng-disabled='loading' ng-change='cleanCredentialsError()' required)
+          input(name='email' type='email' ng-model='user.email' ng-disabled='loading' ng-change='cleanEmail()' required)
           div(ng-messages='loginForm.email.$error' role='alert')
             div(ng-message='required') The e-mail address is invalid.
-            div(ng-message="credentials") Invalid credentials.
+            div(ng-message='credentials') Invalid credentials.
+            div(ng-message='notFound') No player with this e-mail address.
             
         md-input-container.md-block
           label Password

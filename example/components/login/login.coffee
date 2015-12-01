@@ -34,6 +34,10 @@ angular.module 'mmpgLogin', []
               $scope.loginForm.email.$$parseAndValidate()
               $scope.loginForm.password.$$parseAndValidate()
 
+            $scope.cleanEmail = ->
+              delete $scope.loginForm.email.$error.notFound
+              $scope.cleanCredentialsError()
+
             $scope.login = ->
               $scope.loading = true
 
@@ -41,8 +45,12 @@ angular.module 'mmpgLogin', []
                 .done (token) ->
                   alert('Valid credentials')
                 .fail (e, b, error) ->
-                  $scope.loginForm.email.$error.credentials = true
-                  $scope.loginForm.password.$error.credentials = true
+                  if e.status == 400
+                    $scope.loginForm.email.$error.notFound = true
+                  else
+                    $scope.loginForm.email.$error.credentials = true
+                    $scope.loginForm.password.$error.credentials = true
+
                   $scope.loginForm.email.$$parseAndValidate()
                   $scope.loginForm.password.$$parseAndValidate()
                 .always ->
