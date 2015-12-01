@@ -25,6 +25,7 @@
   "devDependencies": {
     "three.js": "threejs#*",
     "angular": "~1.4.7",
-    "angular-material": "1.0.0-rc5"
+    "angular-material": "1.0.0-rc5",
+    "angular-messages": "~1.4.8"
   }
 }

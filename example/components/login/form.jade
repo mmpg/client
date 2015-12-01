@@ -3,25 +3,27 @@ md-dialog(aria-label='Login' ng-cloak)
     md-dialog-content
       .md-dialog-content
         div(align='center')
-          img(src='semafor.png')
+          img(ng-src="{{semaphorImage()}}")
         
         md-input-container.md-block.md-icon-float
           label E-Mail
           md-icon.material-icons email
-          input(type='email' ng-model='user.email' ng-disabled='loading' required)
-          div(ng-messages='loginForm.email.$error')
+          input(name='email' type='email' ng-model='user.email' ng-disabled='loading' ng-change='cleanCredentialsError()' required)
+          div(ng-messages='loginForm.email.$error' role='alert')
             div(ng-message='required') The e-mail address is invalid.
+            div(ng-message="credentials") Invalid credentials.
             
         md-input-container.md-block
           label Password
           md-icon.material-icons vpn_key
-          input(type='password' ng-model='user.password' ng-disabled='loading' required)
-          div(ng-messages='loginForm.password.$error')
+          input(name='password' type='password' ng-model='user.password' ng-disabled='loading' ng-change='cleanCredentialsError()' required)
+          div(ng-messages='loginForm.password.$error' role='alert')
             div(ng-message='required') A password is required.
+            div(ng-message="credentials") Invalid credentials.
         
         div(align='center')
           md-checkbox.md-primary(aria-label='Keep me logged in' ng-model='user.remember') Keep me logged in
         
     md-dialog-actions(layout='row' layout-align='center center')
-        md-button.md-raised.md-primary(ng-click='login()' layout='row' ng-hide='loading') Login
-        md-progress-circular(md-mode='indeterminate' ng-show='loading')
+      md-button.md-raised.md-primary(ng-click='login()' layout='row' ng-hide='loading' ng-disabled='formInvalid()') Login
+      md-progress-circular(md-mode='indeterminate' ng-show='loading')

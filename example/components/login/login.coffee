@@ -12,6 +12,24 @@ angular.module 'mmpgLogin', []
           controller: ($scope, Client) ->
             $scope.user = { email: '', password: '', remember: false }
             $scope.loading = false
+            $scope.invalidCredentials = false
+
+            $scope.formInvalid = ->
+              $scope.loginForm?.$invalid || $scope.loginForm?.email?.$error?.credentials
+
+            $scope.semaphorImage = ->
+              if $scope.loading
+                'semafor_orange.png'
+              else if $scope.formInvalid()
+                'semafor_red.png'
+              else
+                'semafor.png'
+
+            $scope.cleanCredentialsError = ->
+              delete $scope.loginForm.email.$error.credentials
+              delete $scope.loginForm.password.$error.credentials
+              $scope.loginForm.email.$$parseAndValidate()
+              $scope.loginForm.password.$$parseAndValidate()
 
             $scope.login = ->
               $scope.loading = true
@@ -20,7 +38,9 @@ angular.module 'mmpgLogin', []
                 .done (token) ->
                   alert('Valid credentials')
                 .fail (e, b, error) ->
-                  console.log(error)
-                  alert('Invalid credentials')
+                  $scope.loginForm.email.$error.credentials = true
+                  $scope.loginForm.password.$error.credentials = true
+                  $scope.loginForm.email.$$parseAndValidate()
+                  $scope.loginForm.password.$$parseAndValidate()
                 .always ->
                   $scope.loading = false
