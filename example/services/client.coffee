@@ -1,6 +1,39 @@
 angular.module 'mmpgClient', []
-  .service 'Client', ->
+  .factory 'Client', ->
     new MMPG.Client(window.location.hostname + ':8080')
 
-  .service 'EventStream', (Client) ->
+  .factory 'EventStream', (Client) ->
     Client.eventStream()
+
+  .service 'Session', (Client, $localStorage) ->
+    new class
+      constructor: ->
+        @reset()
+
+      login: (user) ->
+        Client.login(user)
+          .done (data) =>
+            @update(new MMPG.Webtoken(data))
+
+      update: (token) ->
+        @user.email = token.payload.email
+        @user.name = @user.email.split('@')[0]
+        @user.logged = true
+        $localStorage.token = token.string
+
+      renew: ->
+        return unless $localStorage.token
+        @update(new MMPG.Webtoken($localStorage.token))
+
+      logout: ->
+        delete $localStorage.token
+        @reset()
+
+      reset: ->
+        @user =
+          email: null
+          name: null
+          logged: false
+
+  .run (Session) ->
+    Session.renew()

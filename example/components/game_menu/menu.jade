@@ -1,0 +1,8 @@
+#toolbar(layout='row' layout-align='end center')
+  md-button.md-fab.md-primary(login ng-hide='session.user.logged')
+    md-tooltip(md-direction='left') Login
+    md-icon.material-icons(aria-label='Login') lock_open
+    
+  md-button.md-fab.md-primary(ng-show='session.user.logged' ng-click='session.logout()')
+    md-tooltip(md-direction='left') Welcome {{session.user.name}}
+    md-icon.material-icons(aria-label='Account') face

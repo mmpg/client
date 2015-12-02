@@ -1,4 +1,7 @@
-angular.module 'mmpgViewer', ['ngMaterial', 'ngMessages', 'mmpgClient', 'mmpgLogin', 'mmpgDebug', 'mmpgGameTime']
+angular.module 'mmpgViewer', [
+  'ngMaterial', 'ngMessages', 'ngStorage',
+  'mmpgClient', 'mmpgDebug', 'mmpgGameTime', 'mmpgGameMenu'
+]
   .config ($mdThemingProvider) ->
     $mdThemingProvider.theme('default')
       .dark()

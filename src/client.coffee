@@ -12,7 +12,6 @@ class MMPG.Client
       url: "http://#{@api}/auth"
       data: JSON.stringify({ email: email, password: password })
       contentType: 'application/json; charset=utf-8'
-      dataType: 'json'
     )
 
   log: (time, progressCallback) ->

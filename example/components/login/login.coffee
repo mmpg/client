@@ -9,13 +9,13 @@ angular.module 'mmpgLogin', []
           templateUrl: 'components/login/form.html'
           clickOutsideToClose: true
           disableParentScroll: false
-          controller: ($scope, Client) ->
+          controller: ($scope, Session) ->
             $scope.user = { email: '', password: '', remember: false }
             $scope.loading = false
             $scope.invalidCredentials = false
 
             $scope.close = ->
-              $mdDialog.hide()
+              $mdDialog.cancel()
 
             $scope.formInvalid = ->
               $scope.loginForm?.$invalid || $scope.loginForm?.email?.$error?.credentials
@@ -41,9 +41,10 @@ angular.module 'mmpgLogin', []
             $scope.login = ->
               $scope.loading = true
 
-              Client.login($scope.user)
-                .done (token) ->
-                  alert('Valid credentials')
+              Session.login($scope.user)
+                .done ->
+                  $mdDialog.hide()
+
                 .fail (e, b, error) ->
                   if e.status == 400
                     $scope.loginForm.email.$error.notFound = true
@@ -53,5 +54,6 @@ angular.module 'mmpgLogin', []
 
                   $scope.loginForm.email.$$parseAndValidate()
                   $scope.loginForm.password.$$parseAndValidate()
+
                 .always ->
                   $scope.loading = false

@@ -87,6 +87,6 @@ md-tooltip .md-content {
 }
 
 input.md-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px white inset;
-  -webkit-text-fill-color: #333;
+  -webkit-box-shadow: 0 0 0px 1000px rgb(33,33,33) inset;
+  -webkit-text-fill-color: #FFF;
 }

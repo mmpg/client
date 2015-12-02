@@ -11,10 +11,7 @@ html(ng-app='mmpgViewer')
     script(src=revs('js/app.js') defer)
   
   body
-    #toolbar(layout='row' layout-align='end center')
-      md-button.md-fab.md-primary(login)
-        md-tooltip(md-direction='left') Login
-        md-icon.material-icons(aria-label='Login') lock_open
+    game-menu
         
     #gameStatus.msg-center
     
