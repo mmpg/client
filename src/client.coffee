@@ -6,7 +6,6 @@ class MMPG.Client
   eventStream: ->
     new MMPG.EventStream("#{@api}/events")
 
-
   setAuth: (token) ->
     $.ajaxSetup
       headers:

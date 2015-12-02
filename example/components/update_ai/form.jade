@@ -1,0 +1,24 @@
+md-dialog(aria-label='Login' ng-cloak)
+  form(name='updateAIForm')
+    md-toolbar
+      .md-toolbar-tools
+        h2 Update my AI
+        span(flex)
+        md-button.md-icon-button(ng-click='close()')
+          md-icon.material-icons close
+      
+    md-dialog-content
+      .md-dialog-content
+        
+        div(layout='row' layout-align='center center')
+          md-button.md-fab.md-raised.md-hue-3.md-mini(browse-files='file')
+            md-tooltip(md-direction='down') Browse files...
+            md-icon.material-icons folder_open
+          
+          span(flex='5')
+          
+          div
+            em {{ file.name || 'No file selected...' }}
+        
+    md-dialog-actions(layout='row' layout-align='center center')
+      md-button.md-raised.md-primary(ng-click='login()') Upload

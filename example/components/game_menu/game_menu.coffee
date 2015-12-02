@@ -1,4 +1,4 @@
-angular.module 'mmpgGameMenu', ['mmpgLogin']
+angular.module 'mmpgGameMenu', ['mmpgLogin', 'mmpgUpdateAI']
   .directive 'gameMenu', ->
     restrict: 'E'
     templateUrl: 'components/game_menu/menu.html'
