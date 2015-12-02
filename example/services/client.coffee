@@ -44,5 +44,11 @@ angular.module 'mmpgClient', []
           name: null
           logged: false
 
-  .run (Session) ->
+  .run ($interval, Session) ->
+    # Renew token on load
     Session.renew()
+
+    # Renew token every 30 minutes
+    $interval(->
+      Session.renew()
+    , 30 * 60 * 1000)
