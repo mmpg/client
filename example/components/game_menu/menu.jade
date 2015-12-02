@@ -3,6 +3,23 @@
     md-tooltip(md-direction='left') Login
     md-icon.material-icons(aria-label='Login') lock_open
     
-  md-button.md-fab.md-primary(ng-show='session.user.logged' ng-click='session.logout()')
-    md-tooltip(md-direction='left') Welcome {{session.user.name}}
-    md-icon.material-icons(aria-label='Account') face
+  div(ng-show='session.user.logged')
+    md-fab-speed-dial.md-scale.md-hover-full(
+      md-direction='down'
+      md-open='menuOpened'
+      ng-mouseenter='menuOpened = true'
+      ng-mouseleave='menuOpened = false'
+    )
+      md-fab-trigger
+        md-button.md-fab.md-primary
+          md-tooltip(md-direction='left') Welcome {{session.user.name}}
+          md-icon.material-icons(aria-label='Account') menu
+      
+      md-fab-actions
+        md-button.md-fab.md-raised.md-mini.md-hue-3
+          md-tooltip(md-direction='left') Update my AI
+          md-icon.material-icons(aria-label='Logout') videogame_asset
+        
+        md-button.md-fab.md-raised.md-mini.md-hue-3(ng-click='session.logout()')
+          md-tooltip(md-direction='left') Logout
+          md-icon.material-icons(aria-label='Logout') exit_to_app

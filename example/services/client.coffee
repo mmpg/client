@@ -31,8 +31,11 @@ angular.module 'mmpgClient', []
         Client.renew(token)
           .done (newToken) =>
             @update(new MMPG.Webtoken(newToken))
-          .fail =>
-            @logout()
+          .fail (e) =>
+            if e.status == 400
+              @logout()
+            else
+              @update(new MMPG.Webtoken(token))
 
       logout: ->
         delete $localStorage.token
