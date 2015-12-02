@@ -20,10 +20,19 @@ angular.module 'mmpgClient', []
         @user.name = @user.email.split('@')[0]
         @user.logged = true
         $localStorage.token = token.string
+        Client.setAuth(token)
 
       renew: ->
-        return unless $localStorage.token
-        @update(new MMPG.Webtoken($localStorage.token))
+        token = $localStorage.token
+        return unless token
+
+        Client.setAuth(token)
+
+        Client.renew(token)
+          .done (newToken) =>
+            @update(new MMPG.Webtoken(newToken))
+          .fail =>
+            @logout()
 
       logout: ->
         delete $localStorage.token

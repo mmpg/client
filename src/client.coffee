@@ -6,12 +6,24 @@ class MMPG.Client
   eventStream: ->
     new MMPG.EventStream("#{@api}/events")
 
+
+  setAuth: (token) ->
+    $.ajaxSetup
+      headers:
+        Authorization: token
+
   login: ({email, password}) ->
     $.ajax(
       type: 'POST'
       url: "http://#{@api}/auth"
       data: JSON.stringify({ email: email, password: password })
       contentType: 'application/json; charset=utf-8'
+    )
+
+  renew: (token) ->
+    $.ajax(
+      type: 'GET',
+      url: "http://#{@api}/auth"
     )
 
   log: (time, progressCallback) ->
