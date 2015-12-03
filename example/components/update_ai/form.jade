@@ -2,15 +2,16 @@ md-dialog(aria-label='Login' ng-cloak)
   form(name='updateAIForm')
     md-toolbar
       .md-toolbar-tools
-        h2 Update my AI
+        h2 Deploy a new player
         span(flex)
         md-button.md-icon-button(ng-click='close()')
           md-icon.material-icons close
       
     md-dialog-content
       .md-dialog-content
+        md-subheader.md-no-sticky Select your player
         
-        div(layout='row' layout-align='center center')
+        .md-padding(layout='row' layout-align='center center')
           md-button.md-fab.md-raised.md-hue-3.md-mini(browse-files='file')
             md-tooltip(md-direction='down') Browse files...
             md-icon.material-icons folder_open
@@ -20,5 +21,17 @@ md-dialog(aria-label='Login' ng-cloak)
           div
             em {{ file.name || 'No file selected...' }}
         
+        md-divider
+        
+        md-subheader.md-no-sticky Deployment progress
+        
+        md-list
+          md-list-item(ng-repeat='task in tasks')
+            md-icon.material-icons(ng-show='task.status == "pending"') watch_later
+            md-progress-circular(md-mode='indeterminate' ng-show='task.status == "working"')
+            p {{ task.description }}
+
     md-dialog-actions(layout='row' layout-align='center center')
-      md-button.md-raised.md-primary(ng-click='login()') Upload
+      md-button.md-raised.md-primary(ng-click='login()' ng-disabled='fileIsInvalid()')
+        md-tooltip(md-direction='top') Deploy
+        md-icon.material-icons cloud_upload

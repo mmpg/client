@@ -90,3 +90,10 @@ input.md-input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px rgb(33,33,33) inset;
   -webkit-text-fill-color: #FFF;
 }
+
+md-list-item > md-progress-circular:first-child {
+  position: relative;
+  left: -10px;
+  margin-right: 6px;
+  box-sizing: content-box;
+}

@@ -3,6 +3,7 @@ angular.module 'mmpgUpdateAI', []
     restrict: 'A'
     link: (scope, element) ->
       element.on 'click', (event) ->
+        event.delegateTarget.blur()
         $mdDialog.show
           parent: angular.element(document.body)
           targetEvent: event
@@ -10,7 +11,18 @@ angular.module 'mmpgUpdateAI', []
           clickOutsideToClose: true
           disableParentScroll: false
           controller: ($scope, Client) ->
-            
+            $scope.close = ->
+              $mdDialog.hide()
+
+            $scope.fileIsInvalid = ->
+              !$scope.file
+
+            $scope.tasks = [
+              { description: 'Uploading new code...', status: 'pending' }
+              { description: 'Compiling update...', status: 'pending' }
+              { description: 'Installing update...', status: 'pending' }
+              { description: 'Restarting ship systems...', status: 'pending' }
+            ]
 
   .directive 'browseFiles', ->
     restrict: 'A'
