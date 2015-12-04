@@ -25,6 +25,27 @@ class MMPG.Client
       url: "http://#{@api}/auth"
     )
 
+  deploy: (player, progressCallback) ->
+    data = new FormData
+    data.append('player', player)
+
+    $.ajax(
+      type: 'POST'
+      url: "http://#{@api}/player"
+      data: data
+      cache: false
+      processData: false
+      xhr: ->
+        xhr = $.ajaxSettings.xhr()
+
+        if xhr.upload
+          xhr.upload.onprogress = (event) ->
+            if progressCallback and event.lengthComputable
+              progressCallback(event.loaded / event.total * 100)
+
+        return xhr
+    )
+
   log: (time, progressCallback) ->
     $.ajax(
       type: 'GET'

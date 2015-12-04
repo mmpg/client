@@ -76,10 +76,16 @@ md-progress-linear .md-bar1 {
   background-color: rgba(63, 81, 181, 0.5);
 }
 
-md-tooltip .md-content {
-  background-color: #000;
-  font-size: 16px;
-  font-family: "Lucida Console", Monaco, monospace;
+md-tooltip {
+  .md-content {
+    background-color: #000;
+    font-size: 16px;
+    font-family: "Lucida Console", Monaco, monospace;
+  }
+
+  &.error .md-content {
+    background-color: rgb(244,67,54);
+  }
 }
 
 .md-input-invalid .material-icons {
@@ -91,9 +97,43 @@ input.md-input:-webkit-autofill {
   -webkit-text-fill-color: #FFF;
 }
 
-md-list-item > md-progress-circular:first-child {
-  position: relative;
-  left: -10px;
-  margin-right: 6px;
-  box-sizing: content-box;
+md-list-item {
+  > md-progress-circular:first-child {
+    position: relative;
+    left: -10px;
+    margin-right: 6px;
+    box-sizing: content-box;
+  }
+
+  &.pending, &.pending > md-icon {
+    color: #777;
+  }
+
+  &.working, &.working > md-icon {
+    color: #FFF;
+  }
+
+  &.error, &.error > md-icon {
+    color: rgb(244,67,54);
+  }
+
+  &.done, &.done > md-icon {
+    color: lighten(green, 15);
+  }
+
+  .error-msg {
+    opacity: 1;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+
+    &.ng-hide-add, &.ng-hide-remove {
+      transition:0.5s linear all;
+    }
+
+    &.ng-hide {
+      opacity: 0;
+      width: 0;
+    }
+  }
 }

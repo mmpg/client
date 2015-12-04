@@ -26,12 +26,20 @@ md-dialog(aria-label='Login' ng-cloak)
         md-subheader.md-no-sticky Deployment progress
         
         md-list
-          md-list-item(ng-repeat='task in tasks')
-            md-icon.material-icons(ng-show='task.status == "pending"') watch_later
-            md-progress-circular(md-mode='indeterminate' ng-show='task.status == "working"')
-            p {{ task.description }}
+          md-list-item(ng-repeat='task in tasks' ng-class='task.status')
+            md-icon.material-icons(ng-if='task.status != "working"')
+              | {{ task.status == 'pending' ? 'watch_later' : task.status }}
+            md-progress-circular(
+              ng-if='task.status == "working"'
+              md-mode='{{ task.progress != undefined ? "determinate" : "indeterminate" }}'
+              value='{{task.progress}}'
+            )
+            div(layout='column' flex)
+              p {{ task.description }}
+              div.error-msg(ng-show='task.status == "error"')
+                small {{ task.tip }}
 
     md-dialog-actions(layout='row' layout-align='center center')
-      md-button.md-raised.md-primary(ng-click='login()' ng-disabled='fileIsInvalid()')
+      md-button.md-raised.md-primary(ng-click='deploy()' ng-disabled='fileIsInvalid()')
         md-tooltip(md-direction='top') Deploy
         md-icon.material-icons cloud_upload
