@@ -20,7 +20,7 @@ angular.module 'mmpgClient', []
         @user.name = @user.email.split('@')[0]
         @user.logged = true
         $localStorage.token = token.string
-        Client.setAuth(token)
+        Client.setAuth(token.string)
 
       renew: ->
         token = $localStorage.token

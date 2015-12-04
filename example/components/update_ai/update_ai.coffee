@@ -10,7 +10,7 @@ angular.module 'mmpgUpdateAI', []
           templateUrl: 'components/update_ai/form.html'
           clickOutsideToClose: true
           disableParentScroll: false
-          controller: ($scope, Client) ->
+          controller: ($scope, $timeout, Client) ->
             tasks =
               upload:
                 description: 'Uploading new code...'
@@ -18,6 +18,7 @@ angular.module 'mmpgUpdateAI', []
                 progress: 0
               compilation:
                 description: 'Compiling update...'
+                tip: 'Show compilation error'
               installation:
                 description: 'Installing update...'
               restart:
@@ -37,6 +38,7 @@ angular.module 'mmpgUpdateAI', []
                 task.status = 'pending'
 
             $scope.reset()
+            $scope.deploying = false
 
             $scope.close = ->
               $mdDialog.hide()
@@ -46,21 +48,30 @@ angular.module 'mmpgUpdateAI', []
 
             $scope.deploy = ->
               $scope.reset()
+              $scope.deploying = true
               tasks.upload.status = 'working'
 
               Client.deploy($scope.file, (progress) ->
                 tasks.upload.progress = progress
-                tasks.upload.status = 'done' if progress == 100
+
+                if progress == 100
+                  tasks.upload.status = 'done'
+                  tasks.compilation.status = 'working'
               )
                 .done ->
                   for _, task of tasks
                     task.status = 'done'
 
-                .fail ->
-                  if tasks.upload.status == 'working'
-                    tasks.upload.status = 'error'
-                  else
+                  $timeout($mdDialog.hide, 1000)
+
+                .fail (e) ->
+                  if e.status == 400
                     tasks.compilation.status = 'error'
+                  else
+                    tasks.upload.status = 'error'
+                    tasks.compilation.status = 'pending'
+
+                  $scope.deploying = false
 
   .directive 'browseFiles', ->
     restrict: 'A'

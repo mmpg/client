@@ -35,6 +35,7 @@ class MMPG.Client
       data: data
       cache: false
       processData: false
+      contentType: false
       xhr: ->
         xhr = $.ajaxSettings.xhr()
 

@@ -34,12 +34,12 @@ md-dialog(aria-label='Login' ng-cloak)
               md-mode='{{ task.progress != undefined ? "determinate" : "indeterminate" }}'
               value='{{task.progress}}'
             )
-            div(layout='column' flex)
-              p {{ task.description }}
-              div.error-msg(ng-show='task.status == "error"')
-                small {{ task.tip }}
+            p {{ task.description }}
+            md-button.md-icon-button.md-warn(ng-show='task.status == "error"')
+              md-icon.material-icons message
+              md-tooltip(md-direction='down') {{ task.tip }}
 
     md-dialog-actions(layout='row' layout-align='center center')
-      md-button.md-raised.md-primary(ng-click='deploy()' ng-disabled='fileIsInvalid()')
+      md-button.md-raised.md-primary(ng-click='deploy()' ng-disabled='deploying || fileIsInvalid()')
         md-tooltip(md-direction='top') Deploy
         md-icon.material-icons cloud_upload
