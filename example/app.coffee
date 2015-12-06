@@ -54,10 +54,17 @@ $ ->
   $('body').append(renderer.domElement)
 
   geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1)
-  material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  material = new THREE.MeshBasicMaterial(color: 0x00ff00)
   cube = new THREE.Mesh(geometry, material)
 
   scene.add(cube)
+
+  sun = new THREE.Mesh(
+    new THREE.SphereGeometry(1.0, 32, 32),
+    new THREE.MeshBasicMaterial(color: 0xf47109)
+  )
+
+  scene.add(sun)
 
   camera.position.z = 5
 
@@ -84,6 +91,7 @@ $ ->
   liveSubscriber.onSync = (data) ->
     cube.position.x = data.players[0].x
     cube.position.y = data.players[0].y
+    sun.scale.x = sun.scale.y = sun.scale.z = data.sun.radius / 20.0
     gameStatus.hide()
 
   liveSubscriber.onAction = (player, data) ->
