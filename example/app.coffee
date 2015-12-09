@@ -46,7 +46,7 @@ class Message
 $ ->
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75,
-    window.innerWidth / window.innerHeight, 350, 450)
+    window.innerWidth / window.innerHeight, 250, 900)
 
   renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -58,6 +58,20 @@ $ ->
   cube = new THREE.Mesh(geometry, material)
 
   scene.add(cube)
+
+  loader = new THREE.TextureLoader()
+  loader.load "space2.png", (spacetex) ->
+    spacesphereGeo = new THREE.SphereGeometry(500, 20, 20);
+    spacesphereMat = new THREE.MeshBasicMaterial(map: spacetex);
+
+    spacesphere = new THREE.Mesh(spacesphereGeo, spacesphereMat);
+    spacesphere.material.side = THREE.BackSide;
+
+    spacesphere.material.map.wrapS = THREE.RepeatWrapping;
+    spacesphere.material.map.wrapT = THREE.RepeatWrapping;
+    spacesphere.material.map.repeat.set(5, 3);
+
+    scene.add(spacesphere)
 
   camera.position.z = 400
 
@@ -123,8 +137,8 @@ $ ->
     if stream.subscriber.synchronized
       cube.rotation.y += 0.01
       cube.rotation.x += 0.1
-      renderer.render(scene, camera)
 
+    renderer.render(scene, camera)
     requestAnimationFrame(render)
 
   render()
