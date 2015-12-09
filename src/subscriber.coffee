@@ -8,15 +8,19 @@ class MMPG.Subscriber
   handleEvent: (event) ->
     @time = event.time
 
-    if event.msg == 'SYNC'
-      @synchronized = true
-      @onSync(JSON.parse(event.data))
+    try
+      if event.msg == 'SYNC'
+        @synchronized = true
+        @onSync(JSON.parse(event.data))
 
-      clearTimeout(@timeout)
-      @timeout = setTimeout(@triggerTimeout, 3000)
+        clearTimeout(@timeout)
+        @timeout = setTimeout(@triggerTimeout, 3000)
 
-    else if @synchronized and event.msg == 'ACTION'
-      @onAction(parseInt(event.data[0]), JSON.parse(event.data[1]))
+      else if @synchronized and event.msg == 'ACTION'
+        @onAction(parseInt(event.data[0]), JSON.parse(event.data[1]))
+    catch e
+      console.log("Invalid JSON: ", event.data)
+      throw e
 
   stop: ->
     @stopped = true

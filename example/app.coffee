@@ -46,7 +46,7 @@ class Message
 $ ->
   scene = new THREE.Scene()
   camera = new THREE.PerspectiveCamera(75,
-    window.innerWidth / window.innerHeight, 0.1, 100)
+    window.innerWidth / window.innerHeight, 350, 450)
 
   renderer = new THREE.WebGLRenderer()
   renderer.setSize(window.innerWidth, window.innerHeight)
@@ -59,14 +59,7 @@ $ ->
 
   scene.add(cube)
 
-  sun = new THREE.Mesh(
-    new THREE.SphereGeometry(1.0, 32, 32),
-    new THREE.MeshBasicMaterial(color: 0xf47109)
-  )
-
-  scene.add(sun)
-
-  camera.position.z = 5
+  camera.position.z = 400
 
   gameStatus = new Message($('#gameStatus'))
 
@@ -74,6 +67,7 @@ $ ->
   stream = angular.element(document.body).injector().get('EventStream')
   liveSubscriber = new MMPG.LiveSubscriber
   game = new MMPG.GameLoop(30)
+  first = true
 
   game.entities.push(gameStatus)
 
@@ -91,7 +85,30 @@ $ ->
   liveSubscriber.onSync = (data) ->
     cube.position.x = data.players[0].x
     cube.position.y = data.players[0].y
-    sun.scale.x = sun.scale.y = sun.scale.z = data.sun.radius / 20.0
+
+    if first
+      first = false
+
+      sun = new THREE.Mesh(
+        new THREE.SphereGeometry(data.system.sun.radius, 32, 32),
+        new THREE.MeshBasicMaterial(color: 0xf47109)
+      )
+
+      scene.add(sun)
+
+      for planet in data.system.planets
+        p = new THREE.Mesh(
+          new THREE.SphereGeometry(planet.radius, 32, 32)
+          new THREE.MeshBasicMaterial(color: 0x0000ff)
+        )
+
+        p.position.x = planet.x
+        p.position.y = planet.y
+
+        scene.add(p)
+
+      console.log(data)
+
     gameStatus.hide()
 
   liveSubscriber.onAction = (player, data) ->
