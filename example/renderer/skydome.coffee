@@ -15,3 +15,6 @@ class Skydome
     material.map.repeat.set(5, 3)
 
     @mesh = new THREE.Mesh(geometry, material)
+
+  addTo: (scene) ->
+    scene.add(@mesh)

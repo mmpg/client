@@ -4,3 +4,8 @@ class Sun
       new THREE.SphereGeometry(radius, 32, 32),
       new THREE.MeshBasicMaterial(color: 0xf47109)
     )
+    @light = new THREE.PointLight(0xf47109, 40)
+
+  addTo: (scene) ->
+    scene.add(@mesh)
+    scene.add(@light)

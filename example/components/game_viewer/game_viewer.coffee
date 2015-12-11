@@ -14,7 +14,7 @@ angular.module 'mmpgGameViewer', []
       loader = new THREE.TextureLoader()
 
       Skydome.load loader, (skydome) ->
-        scene.add(skydome.mesh)
+        skydome.addTo(scene)
 
       geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1)
       material = new THREE.MeshBasicMaterial(color: 0x00ff00)
@@ -50,11 +50,11 @@ angular.module 'mmpgGameViewer', []
           first = false
 
           sun = new Sun(data.system.sun.radius)
-          scene.add(sun.mesh)
+          sun.addTo(scene)
 
           for planet in data.system.planets
             p = new Planet(planet.x, planet.y, planet.radius)
-            scene.add(p.mesh)
+            p.addTo(scene)
 
         gameStatus.hide()
 
