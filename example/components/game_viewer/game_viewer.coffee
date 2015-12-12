@@ -4,8 +4,8 @@ angular.module 'mmpgGameViewer', []
     link: (scope, element) ->
       scene = new THREE.Scene()
 
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 250, 900)
-      camera.position.z = 400
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
+      camera.position.z = 450
 
       renderer = new THREE.WebGLRenderer()
       renderer.setSize(window.innerWidth, window.innerHeight)
@@ -52,8 +52,12 @@ angular.module 'mmpgGameViewer', []
           sun = new Sun(data.system.sun.radius)
           sun.addTo(scene)
 
-          for planet in data.system.planets
-            p = new Planet(planet.x, planet.y, planet.radius)
+          planets = {}
+
+          planets[planet.id] = planet for planet in data.system.planets
+
+          for id, planet of planets
+            p = new Planet(planet.x, planet.y, planet.radius, (planets[c] for c in planet.connections))
             p.addTo(scene)
 
         gameStatus.hide()
