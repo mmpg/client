@@ -13,8 +13,13 @@ angular.module 'mmpgGameViewer', []
 
       loader = new THREE.TextureLoader()
 
+      game = {
+        scene: scene,
+        overlay: new Overlay()
+      }
+
       Skydome.load loader, (skydome) ->
-        skydome.addTo(scene)
+        skydome.addTo(game)
 
       geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1)
       material = new THREE.MeshBasicMaterial(color: 0x00ff00)
@@ -26,10 +31,8 @@ angular.module 'mmpgGameViewer', []
 
       stream = EventStream
       liveSubscriber = new MMPG.LiveSubscriber
-      game = new MMPG.GameLoop(30)
       first = true
 
-      game.entities.push(gameStatus)
 
       stream.notify(liveSubscriber)
 
@@ -50,7 +53,7 @@ angular.module 'mmpgGameViewer', []
           first = false
 
           sun = new Sun(data.system.sun.radius)
-          sun.addTo(scene)
+          sun.addTo(game)
 
           planets = {}
 
@@ -58,7 +61,7 @@ angular.module 'mmpgGameViewer', []
 
           for id, planet of planets
             p = new Planet(planet.x, planet.y, planet.radius, (planets[c] for c in planet.connections))
-            p.addTo(scene)
+            p.addTo(game)
 
         gameStatus.hide()
 
@@ -75,9 +78,14 @@ angular.module 'mmpgGameViewer', []
           cube.rotation.y += 0.01
           cube.rotation.x += 0.1
 
+        game.overlay.render(camera, renderer.domElement)
+
         renderer.render(scene, camera)
         requestAnimationFrame(render)
 
       render()
       stream.connect()
-      game.start()
+
+      gameLoop = new MMPG.GameLoop(30)
+      gameLoop.entities.push(gameStatus)
+      gameLoop.start()

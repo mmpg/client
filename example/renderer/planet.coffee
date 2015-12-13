@@ -28,6 +28,9 @@ class Planet
     @mesh.position.x = x
     @mesh.position.y = y
 
-  addTo: (scene) ->
-    scene.add(@mesh)
-    scene.add(line) for line in @lines
+    @text = new Text("Overlay text", x, y)
+
+  addTo: (game) ->
+    game.scene.add(@mesh)
+    game.scene.add(line) for line in @lines
+    game.overlay.add(@text)

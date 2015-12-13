@@ -6,6 +6,6 @@ class Sun
     )
     @light = new THREE.PointLight(0xf47109, 40)
 
-  addTo: (scene) ->
-    scene.add(@mesh)
-    scene.add(@light)
+  addTo: (game) ->
+    game.scene.add(@mesh)
+    game.scene.add(@light)
