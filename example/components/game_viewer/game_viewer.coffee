@@ -2,6 +2,7 @@ angular.module 'mmpgGameViewer', []
   .directive 'gameViewer', (EventStream) ->
     restrict: 'E'
     link: (scope, element) ->
+      # TODO: Move this code into a Viewer class and refactor it
       scene = new THREE.Scene()
 
       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)

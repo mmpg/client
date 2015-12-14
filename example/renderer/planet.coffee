@@ -33,4 +33,4 @@ class Planet
   addTo: (game) ->
     game.scene.add(@mesh)
     game.scene.add(line) for line in @lines
-    game.overlay.add(@text)
+    #game.overlay.add(@text)
