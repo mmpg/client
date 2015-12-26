@@ -47,9 +47,6 @@ angular.module 'mmpgGameViewer', []
         gameStatus.show('Game paused') if liveSubscriber.synchronized
 
       liveSubscriber.onSync = (data) ->
-        cube.position.x = data.players[0].x
-        cube.position.y = data.players[0].y
-
         if first
           first = false
 
@@ -67,18 +64,9 @@ angular.module 'mmpgGameViewer', []
         gameStatus.hide()
 
       liveSubscriber.onAction = (player, data) ->
-        if data.type == 'move'
-          switch data.direction
-            when 'U' then cube.position.y += 0.1
-            when 'D' then cube.position.y -= 0.1
-            when 'R' then cube.position.x += 0.1
-            when 'L' then cube.position.x -= 0.1
+
 
       render = ->
-        if stream.subscriber.synchronized
-          cube.rotation.y += 0.01
-          cube.rotation.x += 0.1
-
         game.overlay.render(camera, renderer.domElement)
 
         renderer.render(scene, camera)

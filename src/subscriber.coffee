@@ -2,7 +2,7 @@ class MMPG.Subscriber
   constructor: ->
     @synchronized = false
     @stopped = true
-    @buffer = new MMPG.Buffer(60)
+    @buffer = new MMPG.Buffer(2000)
     @ticker = new MMPG.Ticker
 
   handleEvent: (event) ->
