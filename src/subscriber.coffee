@@ -19,7 +19,7 @@ class MMPG.Subscriber
       else if @synchronized and event.msg == 'ACTION'
         @onAction(parseInt(event.data[0]), JSON.parse(event.data[1]))
     catch e
-      console.log("Invalid JSON: ", event.data)
+      console.log("Error while processing event: ", event.data)
       throw e
 
   stop: ->

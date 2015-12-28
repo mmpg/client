@@ -33,7 +33,7 @@ angular.module 'mmpgGameViewer', []
       stream = EventStream
       liveSubscriber = new MMPG.LiveSubscriber
       first = true
-
+      system = null
 
       stream.notify(liveSubscriber)
 
@@ -48,18 +48,11 @@ angular.module 'mmpgGameViewer', []
 
       liveSubscriber.onSync = (data) ->
         if first
+          system = new System(data.system)
+          system.addTo(game)
           first = false
-
-          sun = new Sun(data.system.sun.radius)
-          sun.addTo(game)
-
-          planets = {}
-
-          planets[planet.id] = planet for planet in data.system.planets
-
-          for id, planet of planets
-            p = new Planet(planet.x, planet.y, planet.radius, (planets[c] for c in planet.connections))
-            p.addTo(game)
+        else
+          system.update(data.system)
 
         gameStatus.hide()
 
