@@ -10,12 +10,14 @@ class Planet
     @mesh.position.x = @x
     @mesh.position.y = @y
 
-    @ships_label = new Text(
+    @label = new Text(
       x: @x + @radius
       y: @y - @radius
       klass: 'ships-label'
       content: @ships
     )
+
+    @update(@owner, @ships)
 
   setConnections: (connections) ->
     for connection in connections
@@ -39,7 +41,8 @@ class Planet
   addTo: (scene) ->
     scene.meshes.add(@mesh)
     scene.meshes.add(line) for line in @lines
-    scene.overlay.add(@ships_label)
+    scene.overlay.add(@label)
 
-  setShips: (@ships) ->
-    @ships_label.setContent(@ships)
+  update: (@owner, @ships) ->
+    player = if @owner >= 0 then "<br /><small>Player #{@owner+1}</small>" else ""
+    @label.setContent("#{@ships}#{player}")

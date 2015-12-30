@@ -17,7 +17,7 @@ class System
 
   update: (data) ->
     for planet in data.planets
-      @planets[planet.id].setShips(planet.ships)
+      @planets[planet.id].update(planet.owner, planet.ships)
 
   addTo: (scene) ->
     @sun.addTo(scene)

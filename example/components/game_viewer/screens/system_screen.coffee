@@ -35,14 +35,15 @@ class SystemScreen
 
   onAction: (player, data) ->
     switch data.type
-      when 'send_fleet' then @addFleet(data.origin, data.destination, data.ships)
+      when 'send_fleet' then @addFleet(player, data)
 
-  addFleet: (origin_id, destination_id, ships) ->
-    origin = @system.planets[origin_id]
-    destination = @system.planets[destination_id]
+  addFleet: (player, data) ->
+    origin = @system.planets[data.origin]
+    destination = @system.planets[data.destination]
 
     fleet = new Fleet(
-      ships,
+      data.ships,
+      player,
       new THREE.Vector2(origin.x, origin.y),
       new THREE.Vector2(destination.x, destination.y)
     )

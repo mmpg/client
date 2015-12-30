@@ -1,15 +1,20 @@
 class Fleet
-  constructor: (@ships, @origin, destination) ->
+  constructor: (@ships, @owner, @origin, destination) ->
+    colors = [0xff0000, 0x00ff00]
+
     @mesh = new THREE.Mesh(
-      new THREE.OctahedronGeometry(3.0),
-      new THREE.MeshPhongMaterial(color: 0xff0000, shininess: 1)
+      new THREE.OctahedronGeometry(Math.max(3.0, Math.min(@ships / 20.0, 10.0))),
+      new THREE.MeshPhongMaterial(color: colors[@owner], shininess: 1)
     )
+
+    @timeLeft = @origin.distanceTo(destination) / 40.0
+    @direction = destination.sub(@origin)
+
+    @origin.add(new THREE.Vector2(@direction.y, -@direction.x).normalize().multiplyScalar(5.0))
 
     @mesh.position.x = @origin.x
     @mesh.position.y = @origin.y
 
-    @timeLeft = @origin.distanceTo(destination) / 40.0
-    @direction = destination.sub(@origin)
     @accum = 0.0
 
   addTo: (scene) ->
