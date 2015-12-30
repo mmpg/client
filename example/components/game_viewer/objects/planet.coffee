@@ -36,10 +36,10 @@ class Planet
 
       @lines.push(new THREE.Line(geometry, material))
 
-  addTo: (game) ->
-    game.scene.add(@mesh)
-    game.scene.add(line) for line in @lines
-    game.overlay.add(@ships_label)
+  addTo: (scene) ->
+    scene.meshes.add(@mesh)
+    scene.meshes.add(line) for line in @lines
+    scene.overlay.add(@ships_label)
 
   setShips: (@ships) ->
     @ships_label.setContent(@ships)

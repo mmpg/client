@@ -12,7 +12,7 @@ class Message
     return if @hidden or @current_chars == @text.length
 
     @accum += delta
-    num_chars = Math.min(@text.length, @speed * @accum / 1000)
+    num_chars = Math.min(@text.length, @speed * @accum)
 
     if @current_chars < num_chars
       @current_chars = num_chars

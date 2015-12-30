@@ -3,71 +3,56 @@ angular.module 'mmpgGameViewer', []
     restrict: 'E'
     link: (scope, element) ->
       # TODO: Move this code into a Viewer class and refactor it
-      scene = new THREE.Scene()
-
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
-      camera.position.z = 450
-
-      renderer = new THREE.WebGLRenderer()
-      renderer.setSize(window.innerWidth, window.innerHeight)
-      element.append(renderer.domElement)
-
-      loader = new THREE.TextureLoader()
-
-      game = {
-        scene: scene,
-        overlay: new Overlay()
-      }
-
-      Skydome.load loader, (skydome) ->
-        skydome.addTo(game)
-
-      geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1)
-      material = new THREE.MeshBasicMaterial(color: 0x00ff00)
-      cube = new THREE.Mesh(geometry, material)
-
-      scene.add(cube)
-
-      gameStatus = new Message($('#gameStatus'))
-
-      stream = EventStream
+      viewer = new GameViewer(new SystemScreen())
       liveSubscriber = new MMPG.LiveSubscriber
-      first = true
-      system = null
 
-      stream.notify(liveSubscriber)
+      EventStream.notify(liveSubscriber)
 
       liveSubscriber.onConnect = ->
-        gameStatus.show('Loading...')
+        viewer.onConnect()
 
       liveSubscriber.onDisconnect = ->
-        gameStatus.show('Connection lost. Reconnecting...') if liveSubscriber.buffer.isEmpty()
+        viewer.onDisconnect() if liveSubscriber.buffer.isEmpty()
 
       liveSubscriber.onTimeout = ->
-        gameStatus.show('Game paused') if liveSubscriber.synchronized
+        viewer.onTimeout() if liveSubscriber.synchronized
 
       liveSubscriber.onSync = (data) ->
-        if first
-          system = new System(data.system)
-          system.addTo(game)
-          first = false
-        else
-          system.update(data.system)
-
-        gameStatus.hide()
+        viewer.onSync(data)
 
       liveSubscriber.onAction = (player, data) ->
+        viewer.screen.onAction(player, data)
 
+      element.append(viewer.renderer.domElement)
 
-      render = ->
-        game.overlay.render(camera, renderer.domElement)
+      viewer.render()
+      EventStream.connect()
 
-        renderer.render(scene, camera)
-        requestAnimationFrame(render)
+class GameViewer
+  constructor: (@screen) ->
+    @renderer = new THREE.WebGLRenderer()
+    @renderer.setSize(window.innerWidth, window.innerHeight)
+    @lastFrame = Date.now()
+    @gameStatus = new Message($('#gameStatus'))
 
-      render()
-      stream.connect()
+  onConnect: ->
+    @gameStatus.show('Loading...')
 
-      gameLoop = new MMPG.GameLoop(30)
-      gameLoop.entities.push(gameStatus)
-      gameLoop.start()
+  onDisconnect: ->
+    @gameStatus.show('Connection lost. Reconnecting...')
+
+  onTimeout: ->
+    @gameStatus.show('Game paused')
+
+  onSync: (data) ->
+    @gameStatus.hide()
+    @screen.onSync(data)
+
+  render: =>
+    currentFrame = Date.now()
+    delta = (currentFrame - @lastFrame) / 1000.0
+    @lastFrame = currentFrame
+
+    @gameStatus.update(delta)
+    @screen.render(@renderer, delta)
+    requestAnimationFrame(@render)

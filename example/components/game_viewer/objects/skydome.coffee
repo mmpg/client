@@ -16,5 +16,5 @@ class Skydome
 
     @mesh = new THREE.Mesh(geometry, material)
 
-  addTo: (game) ->
-    game.scene.add(@mesh)
+  addTo: (scene) ->
+    scene.meshes.add(@mesh)

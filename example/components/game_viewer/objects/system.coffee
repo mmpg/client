@@ -19,6 +19,6 @@ class System
     for planet in data.planets
       @planets[planet.id].setShips(planet.ships)
 
-  addTo: (game) ->
-    @sun.addTo(game)
-    planet.addTo(game) for _, planet of @planets
+  addTo: (scene) ->
+    @sun.addTo(scene)
+    planet.addTo(scene) for _, planet of @planets
