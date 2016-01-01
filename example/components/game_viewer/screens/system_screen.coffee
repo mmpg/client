@@ -28,9 +28,9 @@ class SystemScreen
 
   onSync: (data) ->
     if @system
-      @system.update(data.system)
+      @system.update(data.systems[0])
     else
-      @system = new System(data.system)
+      @system = new System(data.systems[0])
       @system.addTo(@scene)
 
   onAction: (player, data) ->
@@ -40,6 +40,8 @@ class SystemScreen
   addFleet: (player, data) ->
     origin = @system.planets[data.origin]
     destination = @system.planets[data.destination]
+
+    return unless origin and destination
 
     fleet = new Fleet(
       data.ships,
