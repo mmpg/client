@@ -37,6 +37,16 @@ class GameViewer
     @renderer.setSize(window.innerWidth, window.innerHeight)
     @lastFrame = Date.now()
     @gameStatus = new Message($('#gameStatus'))
+    @keyboard = new THREEx.KeyboardState()
+    @pressed = {}
+
+  triggered: (key) ->
+    if not @pressed[key]
+      @pressed[key] = @keyboard.pressed(key)
+      return @pressed[key]
+
+    @pressed[key] = @keyboard.pressed(key)
+    return false
 
   onConnect: ->
     @gameStatus.show('Loading...')
@@ -52,12 +62,20 @@ class GameViewer
     @screen.onSync(data)
 
   showSystem: (id) ->
-    @screen = new SystemScreen(@universe.systems[id])
+    @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
+    @screen.scene.destroy() if @screen
+    @screen = new SystemScreen(@universe.systems[@current])
 
   render: =>
     currentFrame = Date.now()
     delta = (currentFrame - @lastFrame) / 1000.0
     @lastFrame = currentFrame
+
+    if @triggered("left")
+      @showSystem(@current - 1)
+
+    else if @triggered("right")
+      @showSystem(@current + 1)
 
     @gameStatus.update(delta)
     @screen.render(@renderer, delta)

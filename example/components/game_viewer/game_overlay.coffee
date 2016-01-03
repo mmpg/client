@@ -8,3 +8,6 @@ class GameOverlay
 
   render: (camera, canvas) ->
     object.render(camera, canvas) for object in @objects
+
+  clear: ->
+    document.body.removeChild(object.object) for object in @objects

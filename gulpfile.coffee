@@ -32,6 +32,7 @@ sources =
       'bower_components/angular-aria/angular-aria.min.js'
       'bower_components/angular-material/angular-material.min.js'
       'bower_components/three.js/build/three.min.js'
+      'bower_components/threex.keyboardstate/threex.keyboardstate.js'
     ]
 
 destinations =
