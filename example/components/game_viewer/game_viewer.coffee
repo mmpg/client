@@ -1,9 +1,8 @@
 angular.module 'mmpgGameViewer', []
-  .directive 'gameViewer', (EventStream) ->
+  .directive 'gameViewer', (Client, EventStream) ->
     restrict: 'E'
     link: (scope, element) ->
-      # TODO: Move this code into a Viewer class and refactor it
-      viewer = new GameViewer(new SystemScreen())
+      viewer = new GameViewer()
       liveSubscriber = new MMPG.LiveSubscriber
 
       EventStream.notify(liveSubscriber)
@@ -25,11 +24,15 @@ angular.module 'mmpgGameViewer', []
 
       element.append(viewer.renderer.domElement)
 
-      viewer.render()
-      EventStream.connect()
+      Client.world()
+        .success (universe) ->
+          viewer.universe = universe
+          viewer.showSystem(0)
+          viewer.render()
+          EventStream.connect()
 
 class GameViewer
-  constructor: (@screen) ->
+  constructor: ->
     @renderer = new THREE.WebGLRenderer()
     @renderer.setSize(window.innerWidth, window.innerHeight)
     @lastFrame = Date.now()
@@ -47,6 +50,9 @@ class GameViewer
   onSync: (data) ->
     @gameStatus.hide()
     @screen.onSync(data)
+
+  showSystem: (id) ->
+    @screen = new SystemScreen(@universe.systems[id])
 
   render: =>
     currentFrame = Date.now()

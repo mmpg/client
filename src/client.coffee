@@ -61,3 +61,9 @@ class MMPG.Client
 
         return xhr
     )
+
+  world: ->
+    $.ajax(
+      type: 'GET'
+      url: "http://#{@api}/world"
+    )

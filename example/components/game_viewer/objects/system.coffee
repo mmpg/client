@@ -8,16 +8,16 @@ class System
         planet.x,
         planet.y,
         planet.radius,
-        planet.owner,
-        planet.ships
+        -1,
+        0
       )
 
     for planet in data.planets
       @planets[planet.id].setConnections(@planets[c] for c in planet.connections)
 
   update: (data) ->
-    for planet in data.planets
-      @planets[planet.id].update(planet.owner, planet.ships)
+    for id, planet of @planets
+      planet.update(data.planets[id*2], data.planets[id*2+1])
 
   addTo: (scene) ->
     @sun.addTo(scene)
