@@ -27,7 +27,7 @@ angular.module 'mmpgGameViewer', []
       Client.world()
         .success (universe) ->
           viewer.universe = universe
-          viewer.showSystem(0)
+          viewer.showGalaxy()
           viewer.render()
           EventStream.connect()
 
@@ -39,6 +39,7 @@ class GameViewer
     @gameStatus = new Message($('#gameStatus'))
     @keyboard = new THREEx.KeyboardState()
     @pressed = {}
+    @current = -1
 
   triggered: (key) ->
     if not @pressed[key]
@@ -60,6 +61,10 @@ class GameViewer
   onSync: (data) ->
     @gameStatus.hide()
     @screen.onSync(data)
+
+  showGalaxy: ->
+    @screen.scene.destroy() if @screen
+    @screen = new GalaxyScreen(@universe)
 
   showSystem: (id) ->
     @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
