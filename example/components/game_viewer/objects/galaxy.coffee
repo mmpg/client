@@ -11,11 +11,13 @@ class Galaxy
     ti = 2 * Math.PI / systemsPerArm
     ri = 2 * Math.PI * systemsPerArm / data.systems.length
 
+    sphere = new THREE.SphereGeometry(1, 32, 32)
+
     for system in data.systems
       @planet_systems[planet.id] = @meshes.length for planet in system.planets
 
       mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 32, 32)
+        sphere,
         new THREE.MeshBasicMaterial(color: 0xffffff)
       )
 
