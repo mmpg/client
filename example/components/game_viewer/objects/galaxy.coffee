@@ -1,5 +1,5 @@
 class Galaxy
-  constructor: (data, players) ->
+  constructor: (data) ->
     @systems = []
     @planet_systems = {}
 
@@ -17,7 +17,7 @@ class Galaxy
       y = a * t * Math.sin(around)
 
       @planet_systems[planet.id] = @systems.length for planet in system.planets
-      @systems.push(new GSystem(@systems.length, x, y, system.owner, players))
+      @systems.push(new GSystem(@systems.length, x, y, system.owner))
 
       t += ti
 
@@ -44,7 +44,7 @@ class Galaxy
 class GSystem
   @SPHERE = new THREE.SphereGeometry(1, 32, 32)
 
-  constructor: (@id, @x, @y, owner, @players) ->
+  constructor: (@id, @x, @y, owner) ->
     @changeOwner(if owner >= 0 then owner else -1)
     @timer = null
 
@@ -56,7 +56,7 @@ class GSystem
       )
     else
       @mesh = new THREE.Sprite(
-        new THREE.SpriteMaterial(map: @players[@owner])
+        new THREE.SpriteMaterial(map: Assets.textures.players[@owner])
       )
 
       @mesh.scale.x = 8

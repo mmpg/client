@@ -1,5 +1,5 @@
 class SystemScreen
-  constructor: (data, assets) ->
+  constructor: (data) ->
     @system = new System(data)
     @scene = new Scene()
     @camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
@@ -7,7 +7,7 @@ class SystemScreen
     @camera.position.z = 450
     @fleets = []
 
-    assets.skydome.addTo(@scene)
+    Assets.objects.skydome.addTo(@scene)
     @system.addTo(@scene)
 
   render: (renderer, delta) ->

@@ -7,13 +7,13 @@ class Viewer
     @keyboard = new THREEx.KeyboardState()
     @pressed = {}
     @current = -1
-    @assets = new Assets()
     @screen = new LoadingScreen()
 
   load: (data, callback) ->
     @universe = new Universe(data)
     @gameStatus.show('Loading assets...')
-    @assets.load([0, 1], callback)
+
+    Assets.load [0, 1], callback
 
   triggered: (key) ->
     if not @pressed[key]
@@ -36,12 +36,12 @@ class Viewer
     @screen = screen
 
   showGalaxy: ->
-    @changeScreen(new GalaxyScreen(@universe, @assets))
+    @changeScreen(new GalaxyScreen(@universe))
     @current = -1
 
   showSystem: (id) ->
     @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
-    @changeScreen(new SystemScreen(@universe.systems[@current], @assets))
+    @changeScreen(new SystemScreen(@universe.systems[@current]))
 
   render: =>
     currentFrame = Date.now()

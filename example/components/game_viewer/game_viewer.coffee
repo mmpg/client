@@ -34,6 +34,6 @@ angular.module 'mmpgGameViewer', []
               viewer.showGalaxy()
               EventStream.connect()
           .error ->
-            start()
+            setTimeout(start, 5000)
 
       start()

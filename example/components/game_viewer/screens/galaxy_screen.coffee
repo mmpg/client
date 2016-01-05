@@ -1,12 +1,12 @@
 class GalaxyScreen
-  constructor: (data, assets) ->
+  constructor: (data) ->
     @scene = new Scene()
     @camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
     @loader = new THREE.TextureLoader()
     @camera.position.z = 450
-    @galaxy = new Galaxy(data, assets.textures.players)
+    @galaxy = new Galaxy(data)
 
-    assets.skydome.addTo(@scene)
+    Assets.objects.skydome.addTo(@scene)
     @galaxy.addTo(@scene)
 
   render: (renderer, delta) ->
