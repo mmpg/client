@@ -1,4 +1,4 @@
-class GameOverlay
+class Overlay
   constructor: ->
     @objects = []
 

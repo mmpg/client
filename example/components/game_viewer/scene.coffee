@@ -1,7 +1,7 @@
-class GameScene
+class Scene
   constructor: ->
     @meshes = new THREE.Scene()
-    @overlay = new GameOverlay()
+    @overlay = new Overlay()
 
   destroy: ->
     @overlay.clear()

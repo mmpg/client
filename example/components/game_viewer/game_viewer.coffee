@@ -2,19 +2,19 @@ angular.module 'mmpgGameViewer', []
   .directive 'gameViewer', (Client, EventStream) ->
     restrict: 'E'
     link: (scope, element) ->
-      viewer = new GameViewer()
+      viewer = new Viewer()
       liveSubscriber = new MMPG.LiveSubscriber
 
       EventStream.notify(liveSubscriber)
 
       liveSubscriber.onConnect = ->
-        viewer.onConnect()
+        viewer.status('Connecting...')
 
       liveSubscriber.onDisconnect = ->
-        viewer.onDisconnect() if liveSubscriber.buffer.isEmpty()
+        viewer.status('Connection lost. Reconnecting...') if liveSubscriber.buffer.isEmpty()
 
       liveSubscriber.onTimeout = ->
-        viewer.onTimeout() if liveSubscriber.synchronized
+        viewer.status('Game paused') if liveSubscriber.synchronized
 
       liveSubscriber.onSync = (data) ->
         viewer.onSync(data)
@@ -23,65 +23,18 @@ angular.module 'mmpgGameViewer', []
         viewer.screen.onAction(player, data)
 
       element.append(viewer.renderer.domElement)
+      viewer.render()
 
-      Client.world()
-        .success (universe) ->
-          viewer.universe = universe
-          viewer.showGalaxy()
-          viewer.render()
-          EventStream.connect()
+      viewer.load ->
+        start = ->
+          viewer.status('Loading world...')
 
-class GameViewer
-  constructor: ->
-    @renderer = new THREE.WebGLRenderer()
-    @renderer.setSize(window.innerWidth, window.innerHeight)
-    @lastFrame = Date.now()
-    @gameStatus = new Message($('#gameStatus'))
-    @keyboard = new THREEx.KeyboardState()
-    @pressed = {}
-    @current = -1
+          Client.world()
+            .success (universe) ->
+              viewer.universe = universe
+              viewer.showGalaxy()
+              EventStream.connect()
+            .error ->
+              start()
 
-  triggered: (key) ->
-    if not @pressed[key]
-      @pressed[key] = @keyboard.pressed(key)
-      return @pressed[key]
-
-    @pressed[key] = @keyboard.pressed(key)
-    return false
-
-  onConnect: ->
-    @gameStatus.show('Loading...')
-
-  onDisconnect: ->
-    @gameStatus.show('Connection lost. Reconnecting...')
-
-  onTimeout: ->
-    @gameStatus.show('Game paused')
-
-  onSync: (data) ->
-    @gameStatus.hide()
-    @screen.onSync(data)
-
-  showGalaxy: ->
-    @screen.scene.destroy() if @screen
-    @screen = new GalaxyScreen(@universe)
-
-  showSystem: (id) ->
-    @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
-    @screen.scene.destroy() if @screen
-    @screen = new SystemScreen(@universe.systems[@current])
-
-  render: =>
-    currentFrame = Date.now()
-    delta = (currentFrame - @lastFrame) / 1000.0
-    @lastFrame = currentFrame
-
-    if @triggered("left")
-      @showSystem(@current - 1)
-
-    else if @triggered("right")
-      @showSystem(@current + 1)
-
-    @gameStatus.update(delta)
-    @screen.render(@renderer, delta)
-    requestAnimationFrame(@render)
+        start()

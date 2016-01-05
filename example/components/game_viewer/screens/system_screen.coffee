@@ -1,15 +1,14 @@
 class SystemScreen
-  constructor: (data) ->
+  constructor: (data, assets) ->
     @system = new System(data)
-    @scene = new GameScene()
+    @scene = new Scene()
     @camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
     @loader = new THREE.TextureLoader()
     @camera.position.z = 450
     @fleets = []
 
-    Skydome.load @loader, (skydome) =>
-      skydome.addTo(@scene)
-      @system.addTo(@scene)
+    assets.skydome.addTo(@scene)
+    @system.addTo(@scene)
 
   render: (renderer, delta) ->
     i = @fleets.length

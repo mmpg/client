@@ -28,6 +28,7 @@
     "angular-material": "1.0.0-rc5",
     "angular-messages": "1.4.8",
     "ngstorage": "0.3.10",
-    "threex.keyboardstate": "*"
+    "threex.keyboardstate": "*",
+    "identicon.js": "https://github.com/hecrj/identicon.js.git"
   }
 }

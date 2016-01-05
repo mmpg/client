@@ -8,8 +8,8 @@ class System
         planet.x,
         planet.y,
         planet.radius,
-        -1,
-        0
+        if planet.owner >= 0 then planet.owner else -1,
+        planet.ships || 0
       )
 
     for planet in data.planets
