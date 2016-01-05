@@ -29,6 +29,7 @@
     "angular-messages": "1.4.8",
     "ngstorage": "0.3.10",
     "threex.keyboardstate": "*",
-    "identicon.js": "https://github.com/hecrj/identicon.js.git"
+    "identicon.js": "https://github.com/hecrj/identicon.js.git",
+    "SparkMD5": "~2.0.0"
   }
 }

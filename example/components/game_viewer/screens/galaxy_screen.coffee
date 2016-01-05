@@ -4,7 +4,7 @@ class GalaxyScreen
     @camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 300, 950)
     @loader = new THREE.TextureLoader()
     @camera.position.z = 450
-    @galaxy = new Galaxy(data)
+    @galaxy = new Galaxy(data, assets.textures.players)
 
     assets.skydome.addTo(@scene)
     @galaxy.addTo(@scene)
@@ -13,8 +13,8 @@ class GalaxyScreen
     @scene.overlay.render(@camera, renderer.domElement)
     renderer.render(@scene.meshes, @camera)
 
-  onSync: (data) ->
-
+  onSync: (data, universe) ->
+    @galaxy.update(@scene, universe)
 
   onAction: (player, data) ->
     switch data.type

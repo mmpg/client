@@ -10,9 +10,10 @@ class Viewer
     @assets = new Assets()
     @screen = new LoadingScreen()
 
-  load: (callback) ->
+  load: (data, callback) ->
+    @universe = new Universe(data)
     @gameStatus.show('Loading assets...')
-    @assets.load(callback)
+    @assets.load([0, 1], callback)
 
   triggered: (key) ->
     if not @pressed[key]
@@ -26,14 +27,9 @@ class Viewer
     if msg then @gameStatus.show(msg) else @gameStatus.hide()
 
   onSync: (data) ->
-    if @universe
-      for system in @universe.systems
-        for planet in system.planets
-          planet.owner = data.planets[planet.id*2]
-          planet.ships = data.planets[planet.id*2+1]
-
+    @universe.update(data)
     @gameStatus.hide()
-    @screen.onSync(data)
+    @screen.onSync(data, @universe)
 
   changeScreen: (screen) ->
     @screen.scene.destroy() if @screen

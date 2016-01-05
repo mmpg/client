@@ -32,6 +32,9 @@ sources =
       'bower_components/angular-aria/angular-aria.min.js'
       'bower_components/angular-material/angular-material.min.js'
       'bower_components/three.js/build/three.min.js'
+      'bower_components/identicon.js/pnglib.js'
+      'bower_components/identicon.js/identicon.js'
+      'bower_components/SparkMD5/spark-md5.min.js'
       'bower_components/threex.keyboardstate/threex.keyboardstate.js'
     ]
 

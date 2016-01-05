@@ -25,16 +25,15 @@ angular.module 'mmpgGameViewer', []
       element.append(viewer.renderer.domElement)
       viewer.render()
 
-      viewer.load ->
-        start = ->
-          viewer.status('Loading world...')
+      start = ->
+        viewer.status('Loading world...')
 
-          Client.world()
-            .success (universe) ->
-              viewer.universe = universe
+        Client.world()
+          .success (universe) ->
+            viewer.load universe, ->
               viewer.showGalaxy()
               EventStream.connect()
-            .error ->
-              start()
+          .error ->
+            start()
 
-        start()
+      start()
