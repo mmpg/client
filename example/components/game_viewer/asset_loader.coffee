@@ -40,7 +40,7 @@ class Assets
     player = players.shift()
 
     identicon = new Identicon(SparkMD5.hash(player.toString()), {
-      size: 512, backgroundColor: [0, 0, 0, 0]
+      size: 128, backgroundColor: [0, 0, 0, 0]
     })
 
     @loader.load 'data:image/png;base64,' + identicon.toString(), (texture) =>

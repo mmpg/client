@@ -13,7 +13,7 @@ class Viewer
     @universe = new Universe(data)
     @gameStatus.show('Loading assets...')
 
-    Assets.load [0, 1], callback
+    Assets.load [0...150], callback
 
   triggered: (key) ->
     if not @pressed[key]

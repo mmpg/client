@@ -16,6 +16,6 @@ class Universe
           players[planet.owner] += 1
 
           if new_owner < 0 or players[planet.owner] > players[new_owner]
-            new_owner = planet.owner if players[planet.owner] > 1
+            new_owner = planet.owner
 
         system.owner = new_owner
