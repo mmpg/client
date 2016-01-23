@@ -24,6 +24,7 @@ class SystemScreen
         @fleets.splice(i, 1)
 
     @scene.overlay.render(@camera, renderer.domElement)
+    @system.render(delta)
     renderer.render(@scene.meshes, @camera)
 
   onSync: (data) ->

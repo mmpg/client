@@ -38,6 +38,24 @@ class Planet
 
       @lines.push(new THREE.Line(geometry, material))
 
+  setRelay: (relay) ->
+    line = new THREE.Line3(
+      new THREE.Vector3(@x, @y, 0),
+      new THREE.Vector3(relay.x, relay.y, 0)
+    )
+    material = new THREE.LineBasicMaterial(color: 0x8888ff);
+    geometry = new THREE.Geometry();
+
+    geometry.vertices.push(
+      line.start,
+      line.center(),
+      line.end
+    );
+
+    geometry.computeLineDistances()
+
+    @lines.push(new THREE.Line(geometry, material))
+
   addTo: (scene) ->
     scene.meshes.add(@mesh)
     scene.meshes.add(line) for line in @lines

@@ -26,6 +26,7 @@ class Sun
     )
 
     @light = new THREE.PointLight(0xf47109, 40)
+    @ambient = new THREE.AmbientLight(0xA0A0A0);
 
     glowMaterial = new THREE.ShaderMaterial(
       uniforms: { color: { type: 'c', value: new THREE.Color(0xf47109) } }
@@ -45,3 +46,4 @@ class Sun
     scene.meshes.add(@mesh)
     scene.meshes.add(@glow)
     scene.meshes.add(@light)
+    scene.meshes.add(@ambient)
