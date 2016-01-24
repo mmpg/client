@@ -37,6 +37,10 @@ class Viewer
         trip = @universe.addFleet(player, data)
         @screen.onNewTrip(trip)
 
+      when 'send_fleet_through_relay'
+        relay_trip = @universe.addFleetThroughRelay(player, data)
+        @screen.onNewRelayTrip(relay_trip)
+
   changeScreen: (screen) ->
     @screen.scene.destroy() if @screen
     @screen = screen

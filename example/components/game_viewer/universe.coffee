@@ -2,10 +2,12 @@ class Universe
   constructor: (data) ->
     @systems = data.systems
     @planets = []
+    @relays = []
     @trips = []
 
     for system in data.systems
       @planets.push(planet) for planet in system.planets
+      @relays.push(system.relay)
 
   onSync: (data) ->
     for system in @systems
@@ -35,6 +37,21 @@ class Universe
 
     @trips.push(trip)
     trip
+
+  addFleetThroughRelay: (player, data) ->
+    [origin_relay, destination_relay] = data.relays
+
+    relay_trip = new RelayTrip(
+      @planets[data.origin],
+      @relays[origin_relay],
+      @relays[destination_relay],
+      @planets[data.destination],
+      data.ships,
+      player
+    )
+
+    @trips.push(relay_trip)
+    relay_trip
 
   update: (delta) ->
     i = @trips.length

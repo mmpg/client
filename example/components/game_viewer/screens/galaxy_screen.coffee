@@ -18,3 +18,6 @@ class GalaxyScreen
 
   onNewTrip: (trip) ->
     @galaxy.highlight(trip.origin.id)
+
+  onNewRelayTrip: (relay_trip) ->
+    

@@ -25,14 +25,12 @@ class Fleet
     scene.meshes.remove(@mesh)
 
   update: ->
-    alpha = @trip.accum / @trip.timeLeft
+    alpha = @trip.accum / @trip.time
 
     currentPosition = @origin.clone().add(@direction.clone().multiplyScalar(alpha))
     @mesh.position.x = currentPosition.x
     @mesh.position.y = currentPosition.y
-
-  hasArrived: ->
-    return @accum >= @timeLeft
+    @mesh.visible = @trip.started
 
 class FleetTrip
   constructor: (@origin, @destination, @ships, @owner) ->
@@ -41,11 +39,40 @@ class FleetTrip
       destination: new THREE.Vector2(@destination.x, @destination.y)
     }
 
-    @timeLeft = @coords.origin.distanceTo(@coords.destination) / 40.0
+    @time = @coords.origin.distanceTo(@coords.destination) / 40.0
     @accum = 0.0
+    @started = false
 
   update: (delta) ->
+    @started = true
     @accum += delta
 
   hasArrived: ->
-    return @accum >= @timeLeft
+    return @accum >= @time
+
+class RelayTrip
+  constructor: (origin, origin_relay, destination_relay, destination, @ships, @owner) ->
+    @origin_trip = new FleetTrip(
+      origin,
+      origin_relay,
+      @ships,
+      @owner
+    )
+
+    @destination_trip = new FleetTrip(
+      destination_relay,
+      destination,
+      @ships,
+      @owner
+    )
+
+    @time = @origin_trip.time + @destination_trip.time
+
+  update: (delta) ->
+    if @origin_trip.hasArrived()
+      @destination_trip.update(delta)
+    else
+      @origin_trip.update(delta)
+
+  hasArrived: ->
+    return @origin_trip.hasArrived() and @destination_trip.hasArrived()

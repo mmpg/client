@@ -7,7 +7,11 @@ class SystemScreen
     @camera.position.z = 450
     @fleets = []
 
-    @onNewTrip(trip) for trip in data.trips
+    for trip in data.trips
+      if trip.origin
+        @onNewTrip(trip)
+      else
+        @onNewRelayTrip(trip)
 
     Assets.objects.skydome.addTo(@scene)
     @system.addTo(@scene)
@@ -42,3 +46,7 @@ class SystemScreen
 
     fleet.addTo(@scene)
     @fleets.push(fleet)
+
+  onNewRelayTrip: (relay_trip) ->
+    @onNewTrip(relay_trip.origin_trip)
+    @onNewTrip(relay_trip.destination_trip)
