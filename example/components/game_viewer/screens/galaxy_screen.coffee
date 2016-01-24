@@ -16,6 +16,5 @@ class GalaxyScreen
   onSync: (data, universe) ->
     @galaxy.update(@scene, universe)
 
-  onAction: (player, data) ->
-    switch data.type
-      when 'send_fleet' then @galaxy.highlight(data.origin)
+  onNewTrip: (trip) ->
+    @galaxy.highlight(trip.origin.id)

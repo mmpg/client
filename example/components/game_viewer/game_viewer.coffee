@@ -20,7 +20,7 @@ angular.module 'mmpgGameViewer', []
         viewer.onSync(data)
 
       liveSubscriber.onAction = (player, data) ->
-        viewer.screen.onAction(player, data)
+        viewer.onAction(player, data)
 
       element.append(viewer.renderer.domElement)
       viewer.render()

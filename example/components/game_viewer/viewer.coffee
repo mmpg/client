@@ -27,9 +27,15 @@ class Viewer
     if msg then @gameStatus.show(msg) else @gameStatus.hide()
 
   onSync: (data) ->
-    @universe.update(data)
+    @universe.onSync(data)
     @gameStatus.hide()
     @screen.onSync(data, @universe)
+
+  onAction: (player, data) ->
+    switch data.type
+      when 'send_fleet'
+        trip = @universe.addFleet(player, data)
+        @screen.onNewTrip(trip)
 
   changeScreen: (screen) ->
     @screen.scene.destroy() if @screen
@@ -41,7 +47,7 @@ class Viewer
 
   showSystem: (id) ->
     @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
-    @changeScreen(new SystemScreen(@universe.systems[@current]))
+    @changeScreen(new SystemScreen(@universe, @current))
 
   render: =>
     currentFrame = Date.now()
@@ -57,6 +63,7 @@ class Viewer
     else if @triggered("g")
       @showGalaxy()
 
+    @universe.update(delta) if @universe
     @gameStatus.update(delta)
     @screen.render(@renderer, delta)
     requestAnimationFrame(@render)
