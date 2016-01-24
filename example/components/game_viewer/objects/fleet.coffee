@@ -16,8 +16,6 @@ class Fleet
     @mesh.position.x = @origin.x
     @mesh.position.y = @origin.y
 
-    @accum = 0.0
-
   addTo: (scene) ->
     scene.meshes.add(@mesh)
 

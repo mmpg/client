@@ -43,6 +43,9 @@ class Galaxy
         system.changeOwner(updated_systems[system.id].owner)
         scene.meshes.add(system.mesh)
 
+  systemForPlanet: (planet) ->
+    @systems[@planet_systems[planet]]
+
 class GSystem
   @SPHERE = new THREE.SphereGeometry(1, 32, 32)
 
