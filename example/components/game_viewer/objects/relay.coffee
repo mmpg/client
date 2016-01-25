@@ -5,7 +5,7 @@ class Relay
 
     @mesh = new THREE.Mesh(
       new THREE.OctahedronGeometry(data.radius),
-      new THREE.MeshPhongMaterial(color: 0x0000EE, shininess: 5)
+      new THREE.MeshPhongMaterial(color: 0x0000EE, shininess: 50)
     )
 
     @mesh.position.x = @x

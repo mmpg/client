@@ -17,9 +17,15 @@ class Assets
         @loaded = true
         callback()
 
-    @loadTextures {
+    textures = {
       skydome: 'space2.png'
-    }, loadPlayerIcons
+    }
+
+    textures["planet#{i}"] = "planets/#{i}.jpg" for i in [0..16]
+
+    @loadTextures textures, ->
+      Assets.textures["planet#{i}"].minFilter = THREE.LinearFilter for i in [0..16]
+      loadPlayerIcons()
 
 
   @loadTextures: (urls, callback) ->

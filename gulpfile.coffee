@@ -19,7 +19,7 @@ ngAnnotate = require 'gulp-ng-annotate'
 sources =
   coffee: ['src/client.coffee', 'src/**/*.coffee']
   examples:
-    public: 'example/public/*'
+    public: 'example/public/**/*'
     coffee: 'example/**/*.coffee'
     html:   'example/**/*.jade'
     sass:   'example/**/*.scss'

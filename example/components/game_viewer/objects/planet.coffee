@@ -1,9 +1,11 @@
 class Planet
-  constructor: (@x, @y, @radius, @owner, @ships) ->
+  constructor: (@x, @y, @radius, @owner, @ships, @type, @rotation_direction, @rotation_speed) ->
     @mesh = new THREE.Mesh(
       new THREE.SphereGeometry(@radius, 32, 32)
-      new THREE.MeshPhongMaterial(color: 0x0000ff, shininess: 1)
+      new THREE.MeshPhongMaterial(color: 0x666666, shininess: 0, map: Assets.textures["planet#{@type}"])
     )
+
+    @mesh.material.specular = new THREE.Color(0x000000)
 
     @lines = []
 
@@ -64,3 +66,6 @@ class Planet
   update: (@owner, @ships) ->
     player = if @owner >= 0 then "<br /><small>Player #{@owner+1}</small>" else ""
     @label.setContent("#{@ships}#{player}")
+
+  render: (delta) ->
+    @mesh.rotation.y += delta * @rotation_speed * @rotation_direction / 10.0

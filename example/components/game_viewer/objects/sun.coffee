@@ -25,7 +25,7 @@ class Sun
       new THREE.MeshPhongMaterial(color: 0xf47109, emissive: 0xf47109)
     )
 
-    @light = new THREE.PointLight(0xf47109, 40)
+    @light = new THREE.PointLight(0xffffff, 5)
     @ambient = new THREE.AmbientLight(0xA0A0A0);
 
     glowMaterial = new THREE.ShaderMaterial(

@@ -10,7 +10,10 @@ class System
         planet.y,
         planet.radius,
         if planet.owner >= 0 then planet.owner else -1,
-        planet.ships || 0
+        planet.ships || 0,
+        planet.type,
+        planet.rotation_direction,
+        planet.rotation_speed
       )
 
     for planet in data.planets
@@ -22,6 +25,7 @@ class System
       planet.update(data.planets[id*2], data.planets[id*2+1])
 
   render: (delta) ->
+    planet.render(delta) for _, planet of @planets
     @relay.render(delta)
 
   addTo: (scene) ->
