@@ -11,7 +11,7 @@ class GalaxyScreen
     @galaxy.addTo(@scene)
 
     for trip in data.trips
-      @onNewRelayTrip(trip) if trip.origin_trip
+      @onNewRelayTrip(trip) if trip.origin_trip and not trip.origin_trip.hasArrived()
 
   render: (renderer, delta) ->
     i = @flash_trips.length
