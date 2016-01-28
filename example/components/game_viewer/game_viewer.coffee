@@ -29,6 +29,9 @@ angular.module 'mmpgGameViewer', []
         containerHeight = window.innerHeight;
         viewer.setSize(containerWidth, containerHeight);
 
+      $(window).click (e) ->
+        viewer.onClick(e)
+
       viewer.render()
 
       start = ->

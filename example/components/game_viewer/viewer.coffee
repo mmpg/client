@@ -53,6 +53,22 @@ class Viewer
     @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
     @changeScreen(new SystemScreen(@universe, @current))
 
+  onClick: (event) ->
+    return unless @screen and @screen.camera and @screen.scene
+
+    raycaster = new THREE.Raycaster()
+    mouse = new THREE.Vector2()
+
+    mouse.x = (event.clientX / @renderer.domElement.clientWidth) * 2 - 1
+    mouse.y = - (event.clientY / @renderer.domElement.clientHeight) * 2 + 1
+
+    raycaster.setFromCamera(mouse, @screen.camera)
+
+    intersects = raycaster.intersectObjects(@screen.scene.meshes.children)
+
+    if intersects.length > 0 and intersects[0].object.callback
+      intersects[0].object.callback(this)
+
   setSize: (width, height) ->
     @renderer.setSize(width, height)
 

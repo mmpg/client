@@ -89,6 +89,9 @@ class GSystem
       @mesh.scale.x = 8
       @mesh.scale.y = 8
 
+    @mesh.callback = (viewer) =>
+      viewer.showSystem(@id)
+      
     @mesh.position.x = @x
     @mesh.position.y = @y
 
