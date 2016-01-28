@@ -64,7 +64,12 @@ class Planet
     scene.overlay.add(@label)
 
   update: (@owner, @ships) ->
-    player = if @owner >= 0 then "<br /><small>Player #{@owner+1}</small>" else ""
+    player = if @owner >= 0
+      text = if @owner > 0 then "Player #{@owner+1}" else "hector.ramon"
+      "<br /><small>#{text}</small>"
+    else
+      ''
+    
     @label.setContent("#{@ships}#{player}")
 
   render: (delta) ->
