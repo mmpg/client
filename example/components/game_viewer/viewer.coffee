@@ -53,6 +53,13 @@ class Viewer
     @current = if id < 0 then @universe.systems.length - 1 else id % @universe.systems.length
     @changeScreen(new SystemScreen(@universe, @current))
 
+  setSize: (width, height) ->
+    @renderer.setSize(width, height)
+
+    if @screen and @screen.camera
+      @screen.camera.aspect = width / height;
+      @screen.camera.updateProjectionMatrix();
+
   render: =>
     currentFrame = Date.now()
     delta = (currentFrame - @lastFrame) / 1000.0

@@ -23,6 +23,12 @@ angular.module 'mmpgGameViewer', []
         viewer.onAction(player, data)
 
       element.append(viewer.renderer.domElement)
+
+      $(window).resize ->
+        containerWidth = window.innerWidth;
+        containerHeight = window.innerHeight;
+        viewer.setSize(containerWidth, containerHeight);
+
       viewer.render()
 
       start = ->
